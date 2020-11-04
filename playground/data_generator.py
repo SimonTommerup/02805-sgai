@@ -3,12 +3,16 @@ import pandas as pd
 from reddit import reddit
 from prawcore.exceptions import Forbidden
 
-num_threads = 10
-num_comments_per_thread = 50
+num_threads = 1
+num_comments_per_thread = 1
+users_to_skip = [None, "AutoModerator"]
+
 data = []
 
-subreddits = [reddit.subreddit("trump"), reddit.subreddit("JoeBiden")]
-for subreddit in subreddits:
+main_subreddits = [reddit.subreddit("trump"), reddit.subreddit("JoeBiden")]
+main_titles = [s.title for s in main_subreddits]
+
+for subreddit in main_subreddits:
 
     subreddit_threads = subreddit.top(limit=num_threads)
     for thread in subreddit_threads:
@@ -17,17 +21,21 @@ for subreddit in subreddits:
         comments = thread.comments
         for comment in comments[:num_comments_per_thread]:
 
-            if comment.author is not None:
+            if comment.author not in users_to_skip:
                 user = reddit.redditor(comment.author.name)
                 used_subreddits = []
 
                 try:
-                    for user_comment in user.comments.top(limit=100):
-                        used_subreddit = user_comment.subreddit
-                        if not user_comment.subreddit in used_subreddits:
-                            used_subreddits.append(used_subreddit)
+                    for user_comment in user.comments.top(limit=10):
+                        print("Looping")
+                        used_subreddit = user_comment.subreddit.title
+                        if not used_subreddit in main_titles:
+                            if not used_subreddit in used_subreddits:
+                                print("Add")
+                                used_subreddits.append(used_subreddit)
 
                 except Forbidden:
+                    print("Except")
                     continue
 
                 data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
@@ -41,10 +49,9 @@ df = pd.DataFrame(data=data, columns=columns)
 print(len(df))
 df
 
-df.to_csv()
 
 # %%
-df.to_csv("./../testdata.csv",sep=";",columns=columns,index=False)
+#df.to_csv("./../testdata2.csv",sep=";",columns=columns,index=False)
 # %%
 
 
