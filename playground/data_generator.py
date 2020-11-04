@@ -35,6 +35,3 @@ for subreddit in subreddits:
 # Pandas DataFrame
 columns = ["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
 df = pd.DataFrame(data=data, columns=columns)
-
-# %%
-pron
