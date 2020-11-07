@@ -15,3 +15,9 @@ Our idea is to take the top (maybe) 100 threads on two opposing subreddits, e.g.
 ### Analyze *user_net* network
 We can then apply all tools learned in the course to this net.
 - If we seperate nodes on either property 1 or 2 above - does their seem to be a community structure? From plots or modularity score? This would mean that e.g. "trump_supporter"s are more likely to be active on another subreddit like "corona virus doesn't exist" or similar...
+
+
+### TODOs:
+- Change encoding of list to json format (by calling json.dump(list))
+- Make retrievel script robust to server errors etc. (know where to start script if it stops..)
+- Downlaod data!!!
