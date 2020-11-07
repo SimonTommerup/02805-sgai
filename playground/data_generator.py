@@ -17,6 +17,8 @@ except_count = 1
 
 try: 
     main_subreddits = [reddit.subreddit("trump"), reddit.subreddit("JoeBiden")]
+    main_titles = [s.title for s in main_subreddits]
+
     for subreddit in main_subreddits:
 
         subreddit_threads = subreddit.top(limit=num_threads)
@@ -28,14 +30,17 @@ try:
                 print(f"Processing comment {jdx} of max {num_comments_per_thread}")
                 
                 if comment.author not in users_to_skip:
+                    users_to_skip.append(comment.author)
+
                     user = reddit.redditor(comment.author.name)
-                    used_subreddits = [f"{subreddit.title}"]
+                    used_subreddits = []
                     try:
                         for kdx, user_comment in enumerate(user.comments.top(limit=num_subreddits_per_user)):
                             print(f"Processing used subreddit {kdx} of max {num_subreddits_per_user}")
                             used_subreddit = user_comment.subreddit.title
-                            if not used_subreddit in used_subreddits:
-                                used_subreddits.append(used_subreddit)
+                            if not used_subreddit in main_titles:
+                                if not used_subreddit in used_subreddits:
+                                    used_subreddits.append(used_subreddit)
 
                     except Forbidden:
                         continue
