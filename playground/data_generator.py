@@ -1,52 +1,62 @@
 #%%
+import time
 import pandas as pd
 from reddit import reddit
 from prawcore.exceptions import Forbidden
+from prawcore.exceptions import ServerError
 
-num_threads = 10
-num_comments_per_thread = 50
+num_threads = 20
+num_comments_per_thread = 20
+num_subreddits_per_user = 10
+users_to_skip = [None, "AutoModerator"]
+file_name = "dataset_20201106.csv"
 data = []
+log = open("log.txt", "a")
+except_count = 1
 
-subreddits = [reddit.subreddit("trump"), reddit.subreddit("JoeBiden")]
-for subreddit in subreddits:
 
-    subreddit_threads = subreddit.top(limit=num_threads)
-    for thread in subreddit_threads:
-        thread.comments.replace_more(limit=0)
+try: 
+    main_subreddits = [reddit.subreddit("trump"), reddit.subreddit("JoeBiden")]
+    for subreddit in main_subreddits:
 
-        comments = thread.comments
-        for comment in comments[:num_comments_per_thread]:
+        subreddit_threads = subreddit.top(limit=num_threads)
+        for idx, thread in enumerate(subreddit_threads):
+            print(f"Processing {subreddit.title}: Thread {idx} of max {num_threads}")
+            thread.comments.replace_more(limit=0)
+            comments = thread.comments
+            for jdx, comment in enumerate(comments[:num_comments_per_thread]):
+                print(f"Processing comment {jdx} of max {num_comments_per_thread}")
+                
+                if comment.author not in users_to_skip:
+                    user = reddit.redditor(comment.author.name)
+                    used_subreddits = [f"{subreddit.title}"]
+                    try:
+                        for kdx, user_comment in enumerate(user.comments.top(limit=num_subreddits_per_user)):
+                            print(f"Processing used subreddit {kdx} of max {num_subreddits_per_user}")
+                            used_subreddit = user_comment.subreddit.title
+                            if not used_subreddit in used_subreddits:
+                                used_subreddits.append(used_subreddit)
 
-            if comment.author is not None:
-                user = reddit.redditor(comment.author.name)
-                used_subreddits = []
+                    except Forbidden:
+                        continue
+                    
+                    if not len(used_subreddits) < 1:
+                        data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
+                        data.append(data_item)
 
-                try:
-                    for user_comment in user.comments.top(limit=100):
-                        used_subreddit = user_comment.subreddit
-                        if not user_comment.subreddit in used_subreddits:
-                            used_subreddits.append(used_subreddit)
+# WE NEED SOME KIND OF WAY TO APPEND
+# TO THE EXISTING DATA
+except ServerError:
+    log.write(f"ServerError exception {except_count}")
+    except_count += 1
+    time.sleep(60)
 
-                except Forbidden:
-                    continue
+log.close()
 
-                data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
-                data.append(data_item)
-
-#%%
-# Pandas DataFrame
 columns = ["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
 df = pd.DataFrame(data=data, columns=columns)
-
-print(len(df))
-df
-
-df.to_csv()
-
-# %%
-df.to_csv("./../testdata.csv",sep=";",columns=columns,index=False)
-# %%
+df.to_csv(file_name,sep=";",columns=columns,index=False)
 
 
-print(df["used_subreddits"][0])
+
 # %%
