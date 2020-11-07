@@ -49,6 +49,7 @@ top_threads = subreddit.top(limit=n_threads)
 
 # Loop through comments of each thread
 for i, thread in enumerate(top_threads):
+
     if not thread.stickied:  # TODO: We should consider if we want this
 
         print('Thread: {}, ups: {}'.format(thread.title, thread.ups))
@@ -56,7 +57,7 @@ for i, thread in enumerate(top_threads):
         
         # Now loop over each comment of current thread
         for j, comment in enumerate(thread.comments.list()[:n_comments]):
-            print(f"{(i*n_threads)+j}/{n_threads*n_comments}")
+            print(f"{(i*n_comments)+j+1}/{n_threads*n_comments}")
             if (comment.author is not None):  # and (comment.author.name not in data): # TODO: if author has more comments, which one do we want?
                 
                 # Retrieve other subreddits which user has commented TODO: make check if list is empty - if so then continue!
