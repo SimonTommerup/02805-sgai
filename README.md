@@ -21,3 +21,34 @@ We can then apply all tools learned in the course to this net.
 - Change encoding of list to json format (by calling json.dump(list))
 - Make retrievel script robust to server errors etc. (know where to start script if it stops..)
 - Downlaod data!!!
+
+
+### Outline:
+
+Klassificering og community detection:
+Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
+tekstanalyse (sentiment analysis - til klassificering)
+netværksanalyse (parent reddit)
+frekvens af top-comments på parent reddit 
+Community detection/score
+Modularity score for trump vs biden partition for each classification
+Brug TR term ratio to make word clouds!
+“sub-word-clouds” for the most frequent words for the entire network (word clouds for comments der indeholder “covid” fx) 
+Partition within each party (“sub-communities”)
+Word clouds for each of these using TF-IDF
+Network statistics to learn about them?
+ 
+Simple network statistics and analysis:
+Network type - random, scale-free etc. (node distribution)
+edge properties for most connected nodes (where edge property between two nodes are their common other_subreddits)
+top commented subreddits (within each community / overall)
+average shortest path within communities (fortæller om diversiteten af vælgerne?)  
+average degree within communities (fortæller noget om hvor mange fælles interesser de har)
+Most central users with respect to degree centrality (disse users interesser dækker umiddelbart de mest typiske interesser for denne egenskab/subreddit - og dermed måske også trump/biden suportters?)
+ 
+Natural language processing:
+Lexical diversity within communities (Er et community mere velformuleret end det andet? - kig eventuelt også på kompleksitet af ord, såsom ordlængde)
+Collocations (make america great again?)
+Sentiment analysis
+Hvilke brugere er typisk mest positive negative (eller hvilken side er mest positiv eller negativ stemt?)
+Er der tendenser inden for sub-communities?
