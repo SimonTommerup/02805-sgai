@@ -1,67 +1,77 @@
-#%%
 import time
+import copy
+import pickle
 import pandas as pd
 from reddit import reddit
+import utils
 from prawcore.exceptions import Forbidden
 from prawcore.exceptions import ServerError
 
-num_threads = 20
-num_comments_per_thread = 20
-num_subreddits_per_user = 50 # Changed from 10
-users_to_skip = [None, "AutoModerator"]
-file_name = "dataset_10nov.csv"
-data = []
-log = open("log.txt", "a")
-except_count = 1
+def data_generator(data_file_name, data_ids, users_to_skip):
+    ids_copy = copy.deepcopy(ids)
+    num_subreddits_per_user=50
+    sleep_time=30
+    data = []
+    with open("log.txt", "a") as log:
+        try:
+            for subreddit_id, thread_ids in ids.items():
+                thread_ids_copy = copy.deepcopy(thread_ids)
 
+                subreddit = list(reddit.info(["t5_" + subreddit_id]))[0]
 
-try: 
-    main_subreddits = [reddit.subreddit("donaldtrump"), reddit.subreddit("JoeBiden")]
-    main_titles = [s.title for s in main_subreddits]
+                for thread_id, comment_ids in thread_ids.items():
+                    comment_ids_copy = copy.deepcopy(comment_ids)
 
-    for subreddit in main_subreddits:
+                    fullnames = ["t1_" + comment_id for comment_id in comment_ids]
 
-        subreddit_threads = subreddit.top(limit=num_threads)
-        for idx, thread in enumerate(subreddit_threads):
-            print(f"Processing {subreddit.title}: Thread {idx} of max {num_threads}")
-            thread.comments.replace_more(limit=0)
-            comments = thread.comments
-            for jdx, comment in enumerate(comments[:num_comments_per_thread]):
-                print(f"Processing comment {jdx} of max {num_comments_per_thread}")
-                
-                if comment.author not in users_to_skip:
-                    users_to_skip.append(comment.author)
+                    comments = reddit.info(fullnames=fullnames)
+                    for comment in comments:
+                        user = reddit.redditor(comment.author.name)
+                        used_subreddits = []
+                        
+                        if comment.author not in users_to_skip:
+                            users_to_skip.append(comment.author)
 
-                    user = reddit.redditor(comment.author.name)
-                    used_subreddits = []
-                    try:
-                        for kdx, user_comment in enumerate(user.comments.top(limit=num_subreddits_per_user)):
-                            print(f"Processing used subreddit {kdx} of max {num_subreddits_per_user}")
-                            used_subreddit = user_comment.subreddit.title
-                            if not used_subreddit in main_titles:
-                                if not used_subreddit in used_subreddits:
+                            try: 
+                                for user_comment in user.comments.top(limit=num_subreddits_per_user):
+                                    used_subreddit = user_comment.subreddit.title
                                     used_subreddits.append(used_subreddit)
 
-                    except Forbidden:
-                        continue
+                                comment_ids_copy.remove(comment.id)
+
+                            except Forbidden:
+                                t = time.time()
+                                log.write("Forbidden: " + time.ctime(t) + "\n")
+                                comment_ids_copy.remove(comment.id)
+                                continue
+                            
+                            data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
+                            data.append(data_item)
+
+                    thread_ids_copy[thread_id] = comment_ids_copy
                     
-                   # if not len(used_subreddits) < 1:
-                    data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
-                    data.append(data_item)
+                ids_copy[subreddit_id] = thread_ids_copy
 
-# WE NEED SOME KIND OF WAY TO APPEND
-# TO THE EXISTING DATA
-except ServerError:
-    log.write(f"ServerError exception {except_count}")
-    except_count += 1
-    time.sleep(60)
+        except ServerError:
+            # Log incident
+            t = time.time()
+            print(f"ServerError Exception. Saving data, then sleeping for {sleep_time} seconds.")
+            log.write(f"ServerError: {time.ctime(t)}")
 
-log.close()
+            # Save data
+            df = pd.DataFrame(data=data)
+            df.to_csv(data_file_name, mode="a", sep=";", header=False, index=False)
 
-columns = ["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
-df = pd.DataFrame(data=data, columns=columns)
-df.to_csv(file_name,sep=";",columns=columns,index=False)
+            # Sleep and resume
+            time.sleep(sleep_time)
+            data_generator(data_file_name, ids_copy, users_to_skip)
 
+        df = pd.DataFrame(data=data)
+        df.to_csv(data_file_name, mode="a", sep=";", header=False, index=False)
 
+if __name__ == "__main__":
+    data_file_name = utils.init_data_file()
+    ids = utils.get_data_ids(["donald_trump", "JoeBiden"], num_threads=2, num_comments_per_thread=2)
+    users_to_skip =  [None, "AutoModerator"]
+    data_generator(data_file_name=data_file_name, data_ids=ids, users_to_skip=users_to_skip)
 
-# %%
