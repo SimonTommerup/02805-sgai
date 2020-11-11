@@ -8,12 +8,12 @@ from prawcore.exceptions import Forbidden
 
 
 # %% Load crendentials and init reddit object
-with open('./../rcred.json') as json_file:
+with open('./data/rcred.json') as json_file:
     creds = json.load(json_file)
 
 # Init reddit object
 reddit = praw.Reddit(client_id=creds['id'],
-                     client_secret=creds['secret'], password=creds['password'],
+                     client_secret=creds['secret'], password=creds['pass'],
                      user_agent=creds['agent'], username=creds['user'])
 
 

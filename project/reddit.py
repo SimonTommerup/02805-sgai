@@ -1,7 +1,10 @@
 import praw
 import json
 
-jcred = open("./../rcred.json")
+from prawcore.exceptions import Forbidden
+
+
+jcred = open("./data/rcred.json")
 rcred = json.load(jcred)
 jcred.close()
 

@@ -7,16 +7,16 @@ from prawcore.exceptions import ServerError
 
 num_threads = 20
 num_comments_per_thread = 20
-num_subreddits_per_user = 10
+num_subreddits_per_user = 50 # Changed from 10
 users_to_skip = [None, "AutoModerator"]
-file_name = "dataset_20201106.csv"
+file_name = "dataset_10nov.csv"
 data = []
 log = open("log.txt", "a")
 except_count = 1
 
 
 try: 
-    main_subreddits = [reddit.subreddit("trump"), reddit.subreddit("JoeBiden")]
+    main_subreddits = [reddit.subreddit("donaldtrump"), reddit.subreddit("JoeBiden")]
     main_titles = [s.title for s in main_subreddits]
 
     for subreddit in main_subreddits:
@@ -45,9 +45,9 @@ try:
                     except Forbidden:
                         continue
                     
-                    if not len(used_subreddits) < 1:
-                        data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
-                        data.append(data_item)
+                   # if not len(used_subreddits) < 1:
+                    data_item = [comment.author.name,subreddit.title,comment.body,used_subreddits,None]
+                    data.append(data_item)
 
 # WE NEED SOME KIND OF WAY TO APPEND
 # TO THE EXISTING DATA
