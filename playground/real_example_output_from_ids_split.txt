@@ -1,0 +1,20 @@
+MAIN
+{'2sgjv': 
+{'jfa96z': ['g9j07p8', 'g9jbhee', 'g9jq8t6', 'g9jmjf3'], 'iycmqv': ['g6bswbw', 'g6buf8o', 'g6ce7lr', 'g6buj4x'], 'jop39k': ['gb9c2me', 'gb9ejfq', 'gb9c7cj', 'gb9y6wa'], 'jrrc35': ['gbuuzda', 'gbuw2a7', 'gbv2mai', 'gbuyugy']}, 
+'2t0th': 
+{'jptp1w': ['gbgqjyg', 'gbgqwjb', 'gbgredx', 'gbgs189'], 'jo6itc': ['gb5zvhe', 'gb60upx', 'gb60k3l', 'gb5zxwl'], 'jpekav': ['gbe5xuy', 'gbecxt6', 'gbedpki', 'gbe5wn4'], 'jrkp74': ['gbto5x1', 'gbttkfw', 'gbtoj39', 'gbu1ex9']}}
+
+1
+{'2sgjv': 
+{'jfa96z': ['g9j07p8', 'g9jbhee', 'g9jq8t6', 'g9jmjf3'], 'iycmqv': ['g6bswbw', 'g6buf8o', 'g6ce7lr', 'g6buj4x']}, 
+'2t0th': 
+{'jptp1w': ['gbgqjyg', 'gbgqwjb', 'gbgredx', 'gbgs189'], 'jo6itc': ['gb5zvhe', 'gb60upx', 'gb60k3l', 'gb5zxwl']}}
+
+
+
+
+2
+{'2sgjv': 
+{'jop39k': ['gb9c2me', 'gb9ejfq', 'gb9c7cj', 'gb9y6wa'], 'jrrc35': ['gbuuzda', 'gbuw2a7', 'gbv2mai', 'gbuyugy']}, 
+'2t0th': 
+{'jpekav': ['gbe5xuy', 'gbecxt6', 'gbedpki', 'gbe5wn4'], 'jrkp74': ['gbto5x1', 'gbttkfw', 'gbtoj39', 'gbu1ex9']}}
