@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 import time
 from reddit import reddit
 
@@ -22,14 +23,18 @@ def get_data_ids(title_list, num_threads, num_comments_per_thread):
 
 def init_data_file():
     ext = ".csv"
-    data_file_name = "dataset_" + local_time() + ext
+    file_name = "RedditDataSet_" + local_time() + ext
+    file_path = os.path.join("data", file_name)
     columns = ["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
     df = pd.DataFrame(columns=columns)
-    df.to_csv(data_file_name, sep=";",index=False)
-    return data_file_name
+    df.to_csv(file_path, sep=";",index=False)
+    return file_path
 
 def local_time():
     t = time.ctime()
     t = t.replace(" ", "")
     t = t.replace(":", "")
     return t
+
+if __name__ == "__main__":
+    print(os.listdir())
