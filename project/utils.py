@@ -69,10 +69,11 @@ def load_ids_from_pickle(partition, main=False):
         ids = pickle.load(handle)
     return ids
 
-def init_data_file():
-    ext = ".csv"
-    file_name = "RedditDataSet_" + local_time() + ext
-    file_path = os.path.join("data", file_name)
+def init_data_file(partition):
+    partition = str(partition)
+    date = local_time()[:8]
+    file_name = "data_partition_" + partition + "_" + date + ".csv"
+    file_path = os.path.join("data/csv_files", file_name)
     columns = ["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
     df = pd.DataFrame(columns=columns)
     df.to_csv(file_path, sep=";",index=False)
