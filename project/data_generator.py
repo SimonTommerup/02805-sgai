@@ -78,7 +78,7 @@ def data_generator(data_file_name, ids, users_to_skip, exception_flag=False, tes
             data_generator(data_file_name, ids_copy, users_to_skip, exception_flag=True)
 
 if __name__ == "__main__":
-    partition = 2
+    partition = 5
 
     data_file_name = utils.init_data_file(partition=partition)
     ids = utils.load_ids_from_pickle(partition=partition)
