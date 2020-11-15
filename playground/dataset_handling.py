@@ -125,15 +125,12 @@ for v in b[1:]:
 
 
 # %%
+
 def join_data_partitions(dataframes):
-    for df in dataframes:
-        idx = df[df["user"]=="user"].index
-        if len(idx) > 0:
-                df = df.drop(idx.values)
-    joined_df = dataframes[0]
-    for df in dataframes[1:]:
-        joined_df = joined_df.append(df)
-    return joined_df
+    jdf = pd.concat(dataframes, axis=0, join="outer", ignore_index=False)
+    indices = jdf[jdf["user"]=="user"].index
+    jdf = jdf.drop(indices)
+    return jdf
 
 
 def remove_repeated_user_entries(dataframe):
@@ -149,17 +146,26 @@ def remove_repeated_user_entries(dataframe):
     return cdf 
 
 # %%
+import pandas as pd
 dfp1 = pd.read_csv("../project/data/csv_files/data_partition_1_ThuNov12.csv", sep=";")
 dfp2 = pd.read_csv("../project/data/csv_files/data_partition_2_FriNov13.csv", sep=";")
 dfp3 = pd.read_csv("../project/data/csv_files/data_partition_3_FriNov13.csv", sep=";")
 dfp4 = pd.read_csv("../project/data/csv_files/data_partition_4_SatNov14.csv", sep=";")
+dfp5 = pd.read_csv("../project/data/csv_files/data_partition_5_SatNov14.csv", sep=";")
+dfp6 = pd.read_csv("../project/data/csv_files/data_partition_6_SunNov15.csv", sep=";")
 
-jdf = join_data_partitions([dfp1, dfp2, dfp3, dfp4])
+
+#%%
+
+jdf = join_data_partitions([dfp1, dfp2, dfp3, dfp4,dfp5,dfp6])
+
+indices = jdf[jdf["user"]=="user"].index
+print("User=\"user\" in Index: ", indices)
+
 total_users = list(jdf["user"])
 print("Total users: ", len(jdf["user"]))
 unique_users = list(set(jdf["user"]))
 print("Unique users: ", len(unique_users))
-
 print("Percentage unique users: ", len(unique_users)/len(total_users)*100)
 
 
@@ -169,11 +175,17 @@ jdf_c = remove_repeated_user_entries(jdf)
 
 print("Users after clean: ", len(jdf_c["user"]))
 print("Set users after clean: ", len(set(jdf_c["user"])))
+#%%
+
+trump_nodes = jdf_c[jdf_c["from_subreddit"].str.contains("Trump")]
+print("Trump nodes: ", len(trump_nodes))
+biden_nodes = jdf_c[jdf_c["from_subreddit"].str.contains("Biden")]
+print("Biden nodes: ", len(biden_nodes))
+
+print("Total: ", len(trump_nodes)+len(biden_nodes))
 
 #%%
-# test that json encoded list loads correctly
-
-print(type(json.loads(jdf_c["used_subreddits"][0])))
+jdf_c.to_csv("../project/data/csv_files/data_partitions_all.csv", sep=";",index=False)
 
 
 # %%
