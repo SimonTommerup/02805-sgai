@@ -54,6 +54,7 @@ Hvilke brugere er typisk mest positive negative (eller hvilken side er mest posi
 Er der tendenser inden for sub-communities?
 
 
+
 # Video script:
 
 ### An explanation of the central idea behind your final project 
@@ -69,6 +70,7 @@ Interesting in many ways:
 - for candidates to understand their supports
 - for the world to understand why USA is polarized (if it is?) 
 - mere? usikker her :D
+
 #### which datasets did you need to explore the idea?, 
 More specifically on the data we are looking at:
 - we are looking at two "main" subreddits ("forums") which themes trump and biden respectively
@@ -78,7 +80,7 @@ More specifically on the data we are looking at:
     - how they express themselves on reddit (i.e. their comments!)
 
 #### how did you download them)
-We download these by ooking at two "main" subreddits: trump_reddit, biden_reddit
+We download these by looking at two "main" subreddits: trump_reddit, biden_reddit
 - for each of these main reddits, we look at the X most popular threads 
 - Then we look at Y users which has posted the most popular comments on each of these X threads 
 - This gives us approx. X*Y users for each main subreddit. For each of these we
