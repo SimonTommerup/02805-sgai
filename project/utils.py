@@ -1,3 +1,4 @@
+#%%
 import pandas as pd
 import os
 import copy
@@ -5,6 +6,7 @@ import pickle
 import time
 from reddit import reddit
 
+#%%
 def get_data_ids(title_list, num_threads, num_comments_per_thread):
     subreddits = [reddit.subreddit(title) for title in title_list]
     ids = {}
@@ -69,6 +71,18 @@ def load_ids_from_pickle(partition, main=False):
         ids = pickle.load(handle)
     return ids
 
+def remove_repeated_user_entries(dataframe):
+    df = dataframe
+    seen_users = []
+    data = []
+    for idx, user in enumerate(df["user"]):
+        if user not in seen_users:
+            seen_users.append(user)
+            data_item = df.iloc[idx].values.flatten().tolist()
+            data.append(data_item)
+    cdf = pd.DataFrame(data=data, columns=df.columns)
+    return cdf 
+
 def init_data_file(partition):
     partition = str(partition)
     date = local_time()[:8]
@@ -84,14 +98,14 @@ def local_time():
     t = t.replace(" ", "")
     t = t.replace(":", "")
     return t
-
+#%%
 if __name__ == "__main__":
     
     # Settings
     subreddit_titles = ["DonaldTrump", "JoeBiden"]
     num_threads=48
     num_comments_per_thread=48
-    num_splits = 6 # 8 threads per ids partition
+    num_splits = 6 # 6 threads per subreddit per ids partition
 
     # Get all ids
     main_ids = get_data_ids(subreddit_titles, num_threads, num_comments_per_thread)
@@ -102,10 +116,13 @@ if __name__ == "__main__":
 
     # Split into ids partitions
     split_ids = split_data_ids(main_ids, num_splits)
-
+    """
     for idx, ids in enumerate(split_ids):
         partition_no = str(idx + 1)
         fname = "ids_partition_" + partition_no
 
         # Save to data/ids_pickles
         save_ids_to_pickle(ids=ids, file_name=fname)
+    """
+
+# %%
