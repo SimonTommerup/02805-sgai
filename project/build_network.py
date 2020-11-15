@@ -48,20 +48,20 @@ def get_common_subreddits(user_id, other_user_id, used_subreddits):
 def load_data(file, main_reddits):
     # ['user', 'from_subreddit', 'comment', 'used_subreddits', 'comment_sentiment']
     df = pd.read_csv(file, sep=";")
-    print(df.head())
     used_subreddits = np.array(df.used_subreddits)
     users = np.array(df.user)
     from_subreddit = np.array(df.from_subreddit)
 
 
     used_subreddits_list = []
-    for l in used_subreddits:
-        l1 = re.findall(r"\'(.*?)\'[,\]]", l) # TODO: Decode using json instead!
-        if main_reddits[0] in l1:
-            l1.remove(main_reddits[0])
-        if main_reddits[1] in l1:
-            l1.remove(main_reddits[1])
-        used_subreddits_list.append(l1)
+    for i, l in enumerate(used_subreddits):
+        # l1 = re.findall(r"\'(.*?)\'[,\]]", l) # TODO: Decode using json instead!
+        l1 = json.loads(l)
+        # if main_reddits[0] in l1:
+        #     l1.remove(main_reddits[0])
+        # if main_reddits[1] in l1:
+        #     l1.remove(main_reddits[1])
+        # used_subreddits_list.append(l1)
     
     return users, used_subreddits_list, from_subreddit
 
@@ -119,11 +119,12 @@ def create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=
     return G
 
 
-main_reddits = ["Donald Trump - 45th President of the United States of America", "Joe Biden for President"]
+main_reddits = ['President Donald Trump - Trump 2020! - Election Defense Task Force - Stop The Steal!', 
+                "President-elect Joe Biden"]
 
 # Load data
-users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partition_1_ThuNov12.csv", main_reddits)
-users, used_subreddits2, from_subreddits2 = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
+users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
+#users, used_subreddits2, from_subreddits2 = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
 
 # OPTIONAL: get top n reddits which are too common among both candidates
 # Maybe we should say that the lowest 1000 rated reddits, which occurs as a minimum of X in both parties?
