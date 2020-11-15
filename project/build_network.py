@@ -48,6 +48,7 @@ def get_common_subreddits(user_id, other_user_id, used_subreddits):
 def load_data(file, main_reddits):
     # ['user', 'from_subreddit', 'comment', 'used_subreddits', 'comment_sentiment']
     df = pd.read_csv(file, sep=";")
+    print(df.head())
     used_subreddits = np.array(df.used_subreddits)
     users = np.array(df.user)
     from_subreddit = np.array(df.from_subreddit)
@@ -121,7 +122,8 @@ def create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=
 main_reddits = ["Donald Trump - 45th President of the United States of America", "Joe Biden for President"]
 
 # Load data
-users, used_subreddits, from_subreddits = load_data("./data/dataset_20201106.csv", main_reddits)
+users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partition_1_ThuNov12.csv", main_reddits)
+users, used_subreddits2, from_subreddits2 = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
 
 # OPTIONAL: get top n reddits which are too common among both candidates
 # Maybe we should say that the lowest 1000 rated reddits, which occurs as a minimum of X in both parties?
