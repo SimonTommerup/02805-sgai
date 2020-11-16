@@ -179,6 +179,7 @@ Filtrated, this gave us XX users for each candidate, which seem sufficient as
     - We assume that authors with posts that are upvoted are sincere authors relative to their subreddit.
     - We assume that this reasoning is amplified by only taking top threads.
 
+4. Since top threads and top comments are in a direct sense endorsed by the subreddit, it is assumed that their representativity of the users in a given subreddit is higher compared to comments with few or no upvotes. Therefore we assume that our sample sizes are large enough to represent users on either subreddit.
 
 # Scene 9/10? Asger hjælp
 We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
@@ -212,6 +213,14 @@ The final network has degrees (i.e. nr. of users with a common subreddit):
 - Average: 1261
 
 (BILLEDE AF DEGREE DIST + WEIGHTED DEGREE DIST. T HAR DEM)
+
+# Scene text analysis:
+The comments will form the basis of:
+- WordClouds on the subreddits based on term frequency-term ratio analysis to investigate the themes of each subreddit
+- Sentiment analysis: General statistics on the sentiments across segments of the network.
+- Sentiment analysis: Predict communities based on the comment sentiment relative to the subreddit to which it is posted. Are genuine Trump voters more positive on r/DonaldTrump and conversely for Biden voters on r/Biden?
+- Natural language processing: Investigate the lexical diversity in the communities: Are the Trump communities more eloquent than the Biden communities or vice versa?
+- Natural language processing: Investigate the possible collocations in the communities: Slogans, catch-phrases and so on.
 
 
 
