@@ -168,6 +168,7 @@ We extract the top 48 associated comments for each thread
 Resulting in 1728 examined users and comments for each candidates' subreddit page. 
 
 # Scene 8.5 (or 9?)
+TODO: Måske dette slide skal flyttes til sidst ala: "so why 2600 nodes?"
 Filtrated, this gave us XX users for each candidate, which seem sufficient as
 1. Users represent only top comments and top threads on r/DonaldTrump and r/JoeBiden.
 
@@ -201,7 +202,17 @@ The final network of users consists of:
     - common_subreddits (between the two linked users)
     - weight (length of common_subreddits)
 
-- MM mb of comments in total. 
+# Scene 16 (lidt hurtigt klip): 
+The data consists of MM mb in total. 
+( BILLEDE AF PANDAS DATAFRAME PRINT? T Har et!)
+
+# Scene 17 (lidt hurtigt klip):
+The final network has degrees (i.e. nr. of users with a common subreddit): 
+- Minimum: 1 
+- Maximum: 2237
+- Average: 1261
+
+(BILLEDE AF DEGREE DIST + WEIGHTED DEGREE DIST. T HAR DEM)
 
 # Scene text analysis:
 The comments will form the basis of:
@@ -216,20 +227,6 @@ The comments will form the basis of:
 
 
 
-#### A walk-through of your preliminary data-analysis, addressing (
-#### What is the total size of your data? (MB, number of rows, number of variables, etc), What is the network you will be analyzing? (number of nodes? number of links?, degree distributions, what are node attributes?, etc.), What is the text you will be analyzing?, How will you tie the two together?) 
-
-The final network we analyze is then of X nodes and Y links. 
-- Each node is a user,
-- where links are created if two users {CONDITION}
-
-Each node will be assigned two attributes:
-- the main subreddit which the user was extracted from (trump or biden)
-- the sentiment score of their comment on the main subreddit
-
-- Edges will be assigned the list which connects the two connected nodes/users
-
-The user comments resulted in Z MB of data. This will also be used to characterize the X supporters language.
 
 
 #### An outline on the elements you'll need to get to your goal & the implementation plan..
