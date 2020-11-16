@@ -165,13 +165,20 @@ Looking at the top 35 threads for each candidate
 
 We extract the top 50 associated comments for each thread
 
-Resulting in approximately 1750 users with comments for each candidates' subreddit page.
+Resulting in approximately 1750 users with comments for each candidates' subreddit page. 
 
-# Scene 8.5 or 9
-These users are then investigated for their further activity on other subreddits to build a network based on their typical interest
+# Scene 8.5 (or 9?)
+These 1750 users ... SIMONS ARGUMENT:... UDGØRE 10% som bør være repr.?
+
+# Scene 8.7
+We will build a network of the users based on their activity on other subreddits, attempting to capture users' interests
 
 # Scene 9
-All users who has commented on 
+Specifically, we create a bipartite network of two distjoint sets, U of users and S of subreddits. A user u is linked to subreddit s, if u has one of its top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
+
+
+
+In the network, users are linked if they have commented on the same subreddit (måske highlighte to røde streger der går mod electroal fraud). The link is assigned a weight equal to the number of subreddits they both commented on
 
 
 #### (what is the idea?, 
