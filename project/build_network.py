@@ -32,7 +32,7 @@ def plot_degree_dist(G, bins, weighted):
 
     plt.title(title)   
     plt.xlabel('Degree')
-    plt.ylabel('Frequency')
+    plt.ylabel('number of users')
     plt.show()
 
 
@@ -180,7 +180,6 @@ def create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=
             if len(common_subreddits) >= n_required_subreddits:
                 G.add_edge(users[user_id], users[other_user_id], common_subreddits=(common_subreddits), 
                            weight=len(common_subreddits))
-        break
     return G
 
 def add_weights_to_graph(G, w_dict):
@@ -199,14 +198,10 @@ def add_weights_to_graph(G, w_dict):
 
 # %%
 
-
-#main_reddits = ['President Donald Trump - Trump 2020! - Election Defense Task Force - Stop The Steal!', 
-              #  "President-elect Joe Biden"]
-
 main_reddits = ['trump', 'biden']
 
 # Load data
-users, used_subreddits, from_subreddits, comments  = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
+users, used_subreddits, from_subreddits, comments = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
 # from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
 
 
@@ -220,14 +215,14 @@ w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
 #G_w = add_weights_to_graph(G, w_dict)
 
 # Plot degree dist
-plot_degree_dist(G, bins=20, weighted=False)
+plot_degree_dist(G, bins=40, weighted=False)
 
 
 # Save graph
-nx.write_gpickle(G, "./data/networks/w_B1300_T1000.gpickle")
+nx.write_gpickle(G, "./data/networks/w_completeG_no_comments.gpickle")
 
 # Load graph
-G = nx.read_gpickle("./data/networks/w_B1300_T1000.gpickle")
+G = nx.read_gpickle("./data/networks/w_completeG_no_comments.gpickle")
 
 
 

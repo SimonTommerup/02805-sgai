@@ -169,7 +169,7 @@ Resulting in 1728 examined users and comments for each candidates' subreddit pag
 
 # Scene 8.5 (or 9?)
 TODO: Måske dette slide skal flyttes til sidst ala: "so why 2600 nodes?"
-Filtrated, this gave us XX users for each candidate, which seem sufficient as
+Filtrated, this gave us ~1340 users for each candidate, which seem sufficient as
 1. Users represent only top comments and top threads on r/DonaldTrump and r/JoeBiden.
 
 2. Top comments are the most upvoted over all time.
@@ -194,23 +194,23 @@ The final network is an undirected network of users, extracted from the bipartit
 # Scene 15:
 The final network of users consists of: 
 
-- ZZ nodes of reddit users with two attributes each:
+- 1728 nodes of reddit users with two attributes each:
     - from_subreddit (trump or biden)
     - comment (posted on from_subreddit)
 
-- RR edges between users, each with two link attributes:
+- 1,860,379 edges between users, each with two link attributes:
     - common_subreddits (between the two linked users)
     - weight (length of common_subreddits)
 
 # Scene 16 (lidt hurtigt klip): 
-The data consists of MM mb in total. 
+The data consists of 4.0 MB in total. 
 ( BILLEDE AF PANDAS DATAFRAME PRINT? T Har et!)
 
 # Scene 17 (lidt hurtigt klip):
-The final network has degrees (i.e. nr. of users with a common subreddit): 
+Degree stats:
 - Minimum: 1 
-- Maximum: 2237
-- Average: 1261
+- Maximum: 2462
+- Average: 1380
 
 (BILLEDE AF DEGREE DIST + WEIGHTED DEGREE DIST. T HAR DEM)
 
