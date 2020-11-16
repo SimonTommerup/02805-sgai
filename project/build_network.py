@@ -170,11 +170,12 @@ def create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=
             common_subreddits = get_common_subreddits(user_id, other_user_id, used_subreddits)
             common_subreddits = list(set(common_subreddits))
             # Remove potentiel 'from_subreddit' as common subreddit
-            common_subreddits = list(filter(lambda e: e not in from_subreddits[user_id], common_subreddits))  
+            common_subreddits = list(filter(lambda e: e not in from_subreddits[user_id], common_subreddits))
+
             if len(common_subreddits) >= n_required_subreddits:
                 G.add_edge(users[user_id], users[other_user_id], common_subreddits=(common_subreddits), 
                            weight=len(common_subreddits))
-
+        break
     return G
 
 def add_weights_to_graph(G, w_dict):
@@ -200,27 +201,25 @@ def add_weights_to_graph(G, w_dict):
 main_reddits = ['trump', 'biden']
 
 # Load data
-users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partitions_all.csv", main_reddits)
+users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
 # from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
 
-#for i in range(len(used_subreddits))
 
 # Create graph
-# TODO: Tildel vægte = Antal fælles reddits! Bevarer info + betydning bevares. 
-G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=5)
+G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
 #%%
 
-# Create weighted graph
+# Create alternative weighted graph
 w_dict, TFTR_raw = get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits)
 w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
 #G_w = add_weights_to_graph(G, w_dict)
 
 # Plot degree dist
-plot_degree_dist(G, bins=50, weighted=False)
+plot_degree_dist(G, bins=20, weighted=True)
 
 
 # Save graph
-#nx.write_gpickle(G, "./data/networks/test.gpickle")
+nx.write_gpickle(G, "./data/networks/w_B1300_T1000.gpickle")
 
 # Load graph
 #H = nx.read_gpickle("./data/networks/test.gpickle")
