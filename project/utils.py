@@ -72,18 +72,12 @@ def load_ids_from_pickle(partition, main=False):
     return ids
 
 def join_data_partitions(dataframes):
-    for df in dataframes:
-        idx = df[df["user"]=="user"].index
-        if len(idx) > 0:
-                df = df.drop(idx.values)
-    joined_df = dataframes[0]
-    for df in dataframes[1:]:
-        joined_df = joined_df.append(df)
-    return joined_df
+    jdf = pd.concat(dataframes, axis=0, join="outer", ignore_index=False)
+    return jdf
 
-def remove_repeated_user_entries(dataframe):
+def remove_repeated_users(dataframe):
     df = dataframe
-    seen_users = []
+    seen_users = ["user"]
     data = []
     for idx, user in enumerate(df["user"]):
         if user not in seen_users:

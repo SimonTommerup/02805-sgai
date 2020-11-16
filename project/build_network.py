@@ -191,7 +191,7 @@ main_reddits = ['President Donald Trump - Trump 2020! - Election Defense Task Fo
                 "President-elect Joe Biden"]
 
 # Load data
-users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
+users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partitions_all.csv", main_reddits)
 #users, used_subreddits2, from_subreddits2 = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
 
 
