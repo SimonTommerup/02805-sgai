@@ -9,14 +9,18 @@ import json
 from collections import Counter
 from tqdm import tqdm
 
+# %%
+def plot_degree_dist(G, bins, weighted):
+    if weighted:
+        degrees = [val for (node, val) in G.degree(weight='weight')]
+    else: 
+        degrees = [val for (node, val) in G.degree()]
 
-def plot_degree_dist(G):
-    degrees = [val for (node, val) in G.degree()]
 
     k_min = np.min(degrees)
     k_max = np.max(degrees)
     print(f"k_min: {min(degrees)}, k_max: {max(degrees)}")
-    count, bins = np.histogram(degrees, bins=30)
+    count, bins = np.histogram(degrees, bins=bins)
     plt.subplots(figsize=(10,8))  
 
     # Hist plot
@@ -66,7 +70,7 @@ def load_data(file, main_reddits):
     return users, used_subreddits_list, from_subreddit
 
 
-def get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits, threshold, min_n_comments):
+def get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits):
     all_subreddits_trump = []
     all_subreddits_biden = []
 
@@ -88,8 +92,9 @@ def get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddit
 
     # _____METHOD 1________: TFTR 
     c = 10
-    all_subreddits = list(tf_trump.keys()) + list(tf_biden.keys())
+    all_subreddits = list(set(list(tf_trump.keys()) + list(tf_biden.keys())))
     TFTR = []
+    TFTR_raw = []
 
     for subreddit in all_subreddits:
         if subreddit in tf_biden:
@@ -104,6 +109,7 @@ def get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddit
 
         weight = max(trump_f, biden_f)/(min(trump_f, biden_f)+c)
         TFTR.append((subreddit, weight))
+        TFTR_raw.append([subreddit, trump_f+biden_f, weight, "trump" if trump_f > biden_f else "biden"])
         TFTR_dict = {n: c for n, c in TFTR}
 
 
@@ -147,7 +153,7 @@ def get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddit
     #     fraction = (min(trump_f, biden_f)+c)/max(trump_f, biden_f)
     #     subreddit_weights.append(fraction)
 
-    return TFTR_dict
+    return TFTR_dict, TFTR_raw
 
 
 def create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1):
@@ -166,7 +172,8 @@ def create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=
             # Remove potentiel 'from_subreddit' as common subreddit
             common_subreddits = list(filter(lambda e: e not in from_subreddits[user_id], common_subreddits))  
             if len(common_subreddits) >= n_required_subreddits:
-                G.add_edge(users[user_id], users[other_user_id], common_subreddits=(common_subreddits))
+                G.add_edge(users[user_id], users[other_user_id], common_subreddits=(common_subreddits), 
+                           weight=len(common_subreddits))
 
     return G
 
@@ -184,30 +191,32 @@ def add_weights_to_graph(G, w_dict):
 
 
 
+# %%
 
 
+#main_reddits = ['President Donald Trump - Trump 2020! - Election Defense Task Force - Stop The Steal!', 
+              #  "President-elect Joe Biden"]
 
-main_reddits = ['President Donald Trump - Trump 2020! - Election Defense Task Force - Stop The Steal!', 
-                "President-elect Joe Biden"]
+main_reddits = ['trump', 'biden']
 
 # Load data
-users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
-#users, used_subreddits2, from_subreddits2 = load_data("./data/csv_files/data_partition_2_FriNov13.csv", main_reddits)
+users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partitions_all.csv", main_reddits)
+from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
 
-
-#subreddits_to_ignore = sorted(subreddits_to_ignore, key=lambda x: x[1])
+#for i in range(len(used_subreddits))
 
 # Create graph
-G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
-
+# TODO: Tildel vægte = Antal fælles reddits! Bevarer info + betydning bevares. 
+G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=5)
+#%%
 
 # Create weighted graph
-w_dict = get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits,
-                                                                          threshold=0.5, min_n_comments=5)
-G_w = add_weights_to_graph(G, w_dict)
+w_dict, TFTR_raw = get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits)
+w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
+#G_w = add_weights_to_graph(G, w_dict)
 
 # Plot degree dist
-plot_degree_dist(G)
+plot_degree_dist(G, bins=50, weighted=False)
 
 
 # Save graph
@@ -218,13 +227,27 @@ plot_degree_dist(G)
 
 
 
+
+
+
+###### CHECK DATA IN GRAPH #########
 lis = [n for n in G.nodes if G.nodes[n]['from_subreddit'] == main_reddits[1]]
-lis = [n for n in G.nodes if G.nodes[n]['from_subreddit'] == main_reddits[0]]
 
-print("")
+ws = []
+for u, v, w in G.edges.data(data="weight"):
+    ws.append(w)
+ws = sorted(ws)
 
-print("REMEMBER TO CHANGE Joe Biden for President")
 
 
+## Degrees
+degrees_w = [val for (node, val) in G.degree(weight='weight')]
+degrees = [val for (node, val) in G.degree()]
+degrees.sort()
+degrees_w.sort()
 
-res = [G_w.edges]
+
+## Freq dists of reddits
+res = sorted(TFTR_raw, key=lambda x: x[1])
+freq_but_not_dif = [[r, f, w, c] for r, f, w, c in res if w > 0.75 and w < 1.25 and f > 30]
+# %%
