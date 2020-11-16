@@ -232,13 +232,14 @@ df = pd.read_csv("../project/data/csv_files/data_all_merged.csv", sep=";")
 
 # %%
 
-teststr = df["used_subreddits"][0]
-print(type(teststr))
-testlst = json.loads(teststr)
-print(type(testlst))
-
-for k in testlst:
-    print(k)
+trump = df[df["from_subreddit"]=="trump"]
+biden = df[df["from_subreddit"]=="biden"]
 
 
+# %%
+nt = len(trump)
+nb = len(biden)
+print("Trump nodes: ", nt)
+print("Biden nodes: ", nb)
+print("Total nodes: ", nt + nb)
 # %%

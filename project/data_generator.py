@@ -28,8 +28,10 @@ def data_generator(data_file_name, ids, users_to_skip, exception_flag=False, tes
                 if subreddit_id == "2t0th" and test:
                     raise ServerError(ServerResponse)
                 
+                _added_nodes = 0
                 for thread_id, comment_ids in thread_ids.items():
                     print(f"Thread {_cthreads} of {_nthreads}")
+                    print(f"Added {_added_nodes} nodes")
                     fullnames = ["t1_" + comment_id for comment_id in comment_ids]
                     
                     _ccomments = 1
@@ -40,13 +42,13 @@ def data_generator(data_file_name, ids, users_to_skip, exception_flag=False, tes
                         print(f"Comment {_ccomments} of {_ncomments}")
                         if comment.author not in users_to_skip:
                             users_to_skip.append(comment.author)
-
                             user = reddit.redditor(comment.author.name)
                             used_subreddits = []
                             try: 
                                 for user_comment in user.comments.top(limit=num_subreddits_per_user):
                                     used_subreddit = user_comment.subreddit.title
                                     used_subreddits.append(used_subreddit)
+                                    _added_nodes += 1
 
                             except Forbidden:
                                 t = time.time()
@@ -80,19 +82,19 @@ if __name__ == "__main__":
 
     # settings
     tl = ["DonaldTrump"]
-    nt = 60
+    nt = 67
     ncpt = 25
-    lti = 47
+    lti = 59
 
     # get ids from thread 49-60
     ids = utils.get_data_ids_from_last_thread_idx(title_list=tl, num_threads=nt, num_comments_per_thread=ncpt, last_thread_idx=lti)
     
     # settings for datAa generation
     # load users already in data set
-    udf = pd.read_csv("../project/data/csv_files/data_all_merged.csv", sep=";")
+    udf = pd.read_csv("../project/data/csv_files/data_merged_equal_nodes.csv", sep=";")
     users_to_skip = udf["user"].values.tolist()
     users_to_skip.append(None)
     users_to_skip.append("AutoModerator")
     
-    data_file_name = "data/csv_files/data_additional_trump.csv"
+    data_file_name = "data/csv_files/data_2nd_additional_trump.csv"
     data_generator(data_file_name=data_file_name, ids=ids, users_to_skip=users_to_skip, test=False)
