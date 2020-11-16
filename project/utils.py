@@ -25,6 +25,25 @@ def get_data_ids(title_list, num_threads, num_comments_per_thread):
         ids[subreddit.id] = thread_ids
     return ids
 
+def get_data_ids_from_last_thread_idx(title_list, num_threads, num_comments_per_thread, last_thread_idx):
+    subreddits = [reddit.subreddit(title) for title in title_list]
+    ids = {}
+    for idx, subreddit in enumerate(subreddits):
+        print(f"Subreddit {idx+1} of {len(subreddits)}")
+        thread_ids = {}
+        threads = subreddit.top(limit=num_threads)
+        for jdx, thread in enumerate(threads):
+            if jdx > last_thread_idx:
+                print(f"Thread {jdx+1} of {num_threads}")
+                thread.comments.replace_more(limit=0)
+                comments = thread.comments
+                comment_ids = []
+                for comment in comments[:num_comments_per_thread]:
+                    comment_ids.append(comment.id)
+                thread_ids[thread.id] = comment_ids
+            ids[subreddit.id] = thread_ids
+    return ids
+
 def _split_threads(l, n):
     splits = []
     for i in range(0, len(l), n):

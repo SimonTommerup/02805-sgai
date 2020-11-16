@@ -8,7 +8,6 @@ import utils
 from prawcore.exceptions import Forbidden
 from prawcore.exceptions import ServerError
 
-## STATUS : ADD THE SUBREDDIT EXTRACTION
 class ServerResponse:
     status_code = 503
 
@@ -79,9 +78,21 @@ def data_generator(data_file_name, ids, users_to_skip, exception_flag=False, tes
 
 if __name__ == "__main__":
 
-    partition = 6
-    data_file_name = utils.init_data_file(partition=partition)
-    ids = utils.load_ids_from_pickle(partition=partition)
-        
-    users_to_skip =  [None, "AutoModerator"]
+    # settings
+    tl = ["DonaldTrump"]
+    nt = 60
+    ncpt = 25
+    lti = 47
+
+    # get ids from thread 49-60
+    ids = utils.get_data_ids_from_last_thread_idx(title_list=tl, num_threads=nt, num_comments_per_thread=ncpt, last_thread_idx=lti)
+    
+    # settings for datAa generation
+    # load users already in data set
+    udf = pd.read_csv("../project/data/csv_files/data_all_merged.csv", sep=";")
+    users_to_skip = udf["user"].values.tolist()
+    users_to_skip.append(None)
+    users_to_skip.append("AutoModerator")
+    
+    data_file_name = "data/csv_files/data_additional_trump.csv"
     data_generator(data_file_name=data_file_name, ids=ids, users_to_skip=users_to_skip, test=False)
