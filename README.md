@@ -179,18 +179,16 @@ Filtrated, this gave us XX users for each candidate, which seem sufficient as
     - We assume that this reasoning is amplified by only taking top threads.
 
 
-# Scene 8.7
+# Scene 9/10? Asger hjælp
 We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
 
-# Scene 9
+# Scene 11
 Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
 
-# Scene 9 or 9.5:
-The final network is an undirected network of users, extracted from the bipartite graph. Two users u1 and u2 are connected 
+# Scene 12->13:
+The final network is an undirected network of users, extracted from the bipartite graph. Two users u1 and u2 are connected with weight equal to number of common links to subreddits v in V. I.e. users are only connected if they have commented on the same subreddit. 
 
 
-
-In the network, users are linked if they have commented on the same subreddit (måske highlighte to røde streger der går mod electroal fraud). The link is assigned a weight equal to the number of subreddits they both commented on
 
 
 #### (what is the idea?, 
