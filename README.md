@@ -200,7 +200,18 @@ The final network of users consists of:
     - common_subreddits (between the two linked users)
     - weight (length of common_subreddits)
 
-- MM mb of comments in total. 
+# Scene 16 (lidt hurtigt klip): 
+The comments consists of MM mb in total. 
+( BILLEDE AF PANDAS DATAFRAME PRINT? T Har et!)
+
+# Scene 17 (lidt hurtigt klip):
+The final network has degrees (i.e. nr. of users with a common subreddit): (BILLEDE AF DEGREE DIST + WEIGHTED DEGREE DIST. T HAR DEM)
+- Minimum: 1 
+- Maximum: 2237
+- Average: 1261
+
+
+
 
 
 

@@ -13,8 +13,11 @@ from tqdm import tqdm
 def plot_degree_dist(G, bins, weighted):
     if weighted:
         degrees = [val for (node, val) in G.degree(weight='weight')]
+        title = "Weighted degree distrubution "
     else: 
         degrees = [val for (node, val) in G.degree()]
+        title = "Degree distrubution "
+
 
 
     k_min = np.min(degrees)
@@ -25,9 +28,9 @@ def plot_degree_dist(G, bins, weighted):
 
     # Hist plot
     #plt.hist(bins[:len(bins)-1], count, color="darksalmon")
-    plt.hist(degrees, bins, color="darkslategray")
+    plt.hist(degrees, bins, color="darksalmon")
 
-    plt.title("Histogram of the degree distrubution ")   
+    plt.title(title)   
     plt.xlabel('Degree')
     plt.ylabel('Frequency')
     plt.show()
@@ -215,14 +218,14 @@ w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
 #G_w = add_weights_to_graph(G, w_dict)
 
 # Plot degree dist
-plot_degree_dist(G, bins=20, weighted=True)
+plot_degree_dist(G, bins=20, weighted=False)
 
 
 # Save graph
 nx.write_gpickle(G, "./data/networks/w_B1300_T1000.gpickle")
 
 # Load graph
-#H = nx.read_gpickle("./data/networks/test.gpickle")
+G = nx.read_gpickle("./data/networks/w_B1300_T1000.gpickle")
 
 
 
