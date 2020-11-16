@@ -178,6 +178,7 @@ Filtrated, this gave us XX users for each candidate, which seem sufficient as
     - We assume that authors with posts that are upvoted are sincere authors relative to their subreddit.
     - We assume that this reasoning is amplified by only taking top threads.
 
+4. Since top threads and top comments are in a direct sense endorsed by the subreddit, it is assumed that their representativity of the users in a given subreddit is higher compared to comments with few or no upvotes. Therefore we assume that our sample sizes are large enough to represent users on either subreddit.
 
 # Scene 9/10? Asger hjælp
 We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
