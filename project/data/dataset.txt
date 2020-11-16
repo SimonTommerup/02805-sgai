@@ -1,1 +1,0 @@
-user;from_subreddit;comment;used_subreddits;comment_sentiment

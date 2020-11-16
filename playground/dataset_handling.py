@@ -225,3 +225,20 @@ df.to_csv("../project/data/csv_files/data_all_simple_mains.csv", sep=";",index=F
 
 
 # %%
+import pandas as pd
+import json
+
+df = pd.read_csv("../project/data/csv_files/data_all_merged.csv", sep=";")
+
+# %%
+
+teststr = df["used_subreddits"][0]
+print(type(teststr))
+testlst = json.loads(teststr)
+print(type(testlst))
+
+for k in testlst:
+    print(k)
+
+
+# %%
