@@ -9,7 +9,7 @@ dfp3 = pd.read_csv("../project/data/csv_files/data_partition_3_FriNov13.csv", se
 dfp4 = pd.read_csv("../project/data/csv_files/data_partition_4_SatNov14.csv", sep=";")
 dfp5 = pd.read_csv("../project/data/csv_files/data_partition_5_SatNov14.csv", sep=";")
 dfp6 = pd.read_csv("../project/data/csv_files/data_partition_6_SunNov15.csv", sep=";")
-
+dfp7 = pd.read_csv("../project/data/csv_files/data_additional_trump.csv", sep=";")
 
 def join_data_partitions(dataframes):
     jdf = pd.concat(dataframes, axis=0, join="outer", ignore_index=False)
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     csv_file_name = "data_descriptive_name" + csv_ext
     csv_file_path = os.path.join("data/csv_files", csv_file_name)
 
-    dataframes = [dfp1, dfp2, dfp3, dfp4, dfp5, dfp6]
+    dataframes = [dfp1, dfp2, dfp3, dfp4, dfp5, dfp6, dfp7]
 
     df = join_data_partitions(dataframes)
     df = remove_repeated_users(df)

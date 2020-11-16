@@ -113,3 +113,17 @@ for d in b:
 test = b[2]
 print(test.items())
 # %%
+
+threads = 12
+comments = 25
+
+no_users = threads*comments
+print(no_users)
+
+#%%
+
+a = list(range(1,60))
+print(len(a))
+print(len(a[47:]))
+# %%
+... 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60
