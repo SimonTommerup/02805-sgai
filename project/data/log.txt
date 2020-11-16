@@ -59,3 +59,11 @@ Forbidden: Sun Nov 15 15:32:12 2020
 Forbidden: Sun Nov 15 15:32:28 2020
 Forbidden: Sun Nov 15 15:32:29 2020
 ServerError: Sun Nov 15 15:47:35 2020 
+Forbidden: Mon Nov 16 16:48:22 2020
+Forbidden: Mon Nov 16 16:51:47 2020
+Forbidden: Mon Nov 16 17:16:29 2020
+Forbidden: Mon Nov 16 17:18:12 2020
+Forbidden: Mon Nov 16 17:19:05 2020
+Forbidden: Mon Nov 16 17:19:57 2020
+Forbidden: Mon Nov 16 17:51:45 2020
+Forbidden: Mon Nov 16 18:27:12 2020
