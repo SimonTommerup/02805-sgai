@@ -58,6 +58,8 @@ def load_data(file, main_reddits):
     used_subreddits = np.array(df.used_subreddits)
     users = np.array(df.user)
     from_subreddit = np.array(df.from_subreddit)
+    comments = np.array(df.comment)
+
 
 
     used_subreddits_list = []
@@ -70,7 +72,7 @@ def load_data(file, main_reddits):
         #     l1.remove(main_reddits[1])
         used_subreddits_list.append(l1)
     
-    return users, used_subreddits_list, from_subreddit
+    return users, used_subreddits_list, from_subreddit, comments
 
 
 def get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits):
@@ -204,7 +206,7 @@ def add_weights_to_graph(G, w_dict):
 main_reddits = ['trump', 'biden']
 
 # Load data
-users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
+users, used_subreddits, from_subreddits, comments  = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
 # from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
 
 
@@ -235,11 +237,12 @@ G = nx.read_gpickle("./data/networks/w_B1300_T1000.gpickle")
 ###### CHECK DATA IN GRAPH #########
 lis = [n for n in G.nodes if G.nodes[n]['from_subreddit'] == main_reddits[1]]
 
+
+### Loop through weight of edges
 ws = []
 for u, v, w in G.edges.data(data="weight"):
     ws.append(w)
 ws = sorted(ws)
-
 
 
 ## Degrees
