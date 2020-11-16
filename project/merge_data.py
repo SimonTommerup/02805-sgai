@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     # settings
     csv_ext = ".csv"
-    csv_file_name = "data_all_merged" + csv_ext
+    csv_file_name = "data_descriptive_name" + csv_ext
     csv_file_path = os.path.join("data/csv_files", csv_file_name)
 
     dataframes = [dfp1, dfp2, dfp3, dfp4, dfp5, dfp6]
