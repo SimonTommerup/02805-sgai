@@ -185,6 +185,8 @@ We want a network of users which are connected based on their activity on other 
 # Scene 9
 Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
 
+# Scene 9 or 9.5:
+The final network is an undirected network of users, extracted from the bipartite graph. Two users u1 and u2 are connected 
 
 
 
