@@ -161,20 +161,30 @@ Info on supporters are extracted from the candidates' main subreddit pages
 (Synes ikke deres egentlige navne er nødvendige. Disse skifter ofte)
 
 # Scene 7+8
-Looking at the top 35 threads for each candidate
+Looking at the top 36 threads for each candidate
 
-We extract the top 50 associated comments for each thread
+We extract the top 48 associated comments for each thread
 
-Resulting in approximately 1750 users with comments for each candidates' subreddit page. 
+Resulting in 1728 examined users and comments for each candidates' subreddit page. 
 
 # Scene 8.5 (or 9?)
-These 1750 users ... SIMONS ARGUMENT:... UDGØRE 10% som bør være repr.?
+Filtrated, this gave us XX users for each candidate, which seem sufficient as
+1. Users represent only top comments and top threads on r/DonaldTrump and r/JoeBiden.
+
+2. Top comments are the most upvoted over all time.
+
+3. Top comments ensures quality of the nodes, which means
+    - The comments are not gibberish.
+    - We assume that authors with posts that are upvoted are sincere authors relative to their subreddit.
+    - We assume that this reasoning is amplified by only taking top threads.
+
 
 # Scene 8.7
-We will build a network of the users based on their activity on other subreddits, attempting to capture users' interests
+We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
 
 # Scene 9
-Specifically, we create a bipartite network of two distjoint sets, U of users and S of subreddits. A user u is linked to subreddit s, if u has one of its top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
+Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
+
 
 
 
