@@ -71,28 +71,6 @@ def load_ids_from_pickle(partition, main=False):
         ids = pickle.load(handle)
     return ids
 
-def join_data_partitions(dataframes):
-    for df in dataframes:
-        idx = df[df["user"]=="user"].index
-        if len(idx) > 0:
-                df = df.drop(idx.values)
-    joined_df = dataframes[0]
-    for df in dataframes[1:]:
-        joined_df = joined_df.append(df)
-    return joined_df
-
-def remove_repeated_user_entries(dataframe):
-    df = dataframe
-    seen_users = []
-    data = []
-    for idx, user in enumerate(df["user"]):
-        if user not in seen_users:
-            seen_users.append(user)
-            data_item = df.iloc[idx].values.flatten().tolist()
-            data.append(data_item)
-    cdf = pd.DataFrame(data=data, columns=df.columns)
-    return cdf 
-
 def init_data_file(partition):
     partition = str(partition)
     date = local_time()[:8]

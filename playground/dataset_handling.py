@@ -128,20 +128,19 @@ for v in b[1:]:
 
 def join_data_partitions(dataframes):
     jdf = pd.concat(dataframes, axis=0, join="outer", ignore_index=False)
-    indices = jdf[jdf["user"]=="user"].index
-    jdf = jdf.drop(indices)
     return jdf
 
 
 def remove_repeated_user_entries(dataframe):
     df = dataframe
-    seen_users = []
+    seen_users = ["user"]
     data = []
     for idx, user in enumerate(df["user"]):
         if user not in seen_users:
             seen_users.append(user)
             data_item = df.iloc[idx].values.flatten().tolist()
             data.append(data_item)
+
     cdf = pd.DataFrame(data=data, columns=df.columns)
     return cdf 
 
@@ -158,34 +157,71 @@ dfp6 = pd.read_csv("../project/data/csv_files/data_partition_6_SunNov15.csv", se
 #%%
 
 jdf = join_data_partitions([dfp1, dfp2, dfp3, dfp4,dfp5,dfp6])
-
 indices = jdf[jdf["user"]=="user"].index
-print("User=\"user\" in Index: ", indices)
-
+print("\"user\" index in joined dataframe: ", indices)
 total_users = list(jdf["user"])
 print("Total users: ", len(jdf["user"]))
 unique_users = list(set(jdf["user"]))
+print("User is unique user: ", "user" in unique_users)
 print("Unique users: ", len(unique_users))
 print("Percentage unique users: ", len(unique_users)/len(total_users)*100)
 
 
 # %%
-
 jdf_c = remove_repeated_user_entries(jdf)
-
+indices = jdf_c[jdf_c["user"]=="user"].index
+print("User index in cleaned dataframe: ", indices)
 print("Users after clean: ", len(jdf_c["user"]))
 print("Set users after clean: ", len(set(jdf_c["user"])))
+print("User is unique user: ", "user" in list(set(jdf_c["user"])))
 #%%
 
-trump_nodes = jdf_c[jdf_c["from_subreddit"].str.contains("Trump")]
-print("Trump nodes: ", len(trump_nodes))
-biden_nodes = jdf_c[jdf_c["from_subreddit"].str.contains("Biden")]
-print("Biden nodes: ", len(biden_nodes))
+df = jdf_c
+subredditnames = list(set(jdf_c["from_subreddit"]))
+for name in subredditnames:
+    if "trump" in name.lower():
+        df.loc[df["from_subreddit"]==name, "from_subreddit"] = "trump"
+    elif "biden" in name.lower():
+        df.loc[df["from_subreddit"]==name, "from_subreddit"] = "biden"
 
-print("Total: ", len(trump_nodes)+len(biden_nodes))
+c_subredditnames = list(set(jdf_c["from_subreddit"]))
+
+print(subredditnames)
+print(c_subredditnames)
+
 
 #%%
-jdf_c.to_csv("../project/data/csv_files/data_partitions_all.csv", sep=";",index=False)
+import json
+
+
+#%%
+before = df["used_subreddits"][0]
+print("BEFORE: ", before)
+for outer_idx, l in enumerate(df["used_subreddits"]):
+    #print("LIST: ", type(l))
+    l = json.loads(l)
+    #print("LIST: ", type(l))
+    for inner_idx, element in enumerate(l):
+        for name in subredditnames:
+            if element == name:
+                if "trump" in name.lower():
+                    l[inner_idx] = "trump"
+                elif "biden" in name.lower():
+                    l[inner_idx] = "biden"
+    l = json.dumps(l)
+    df["used_subreddits"][outer_idx] = l
+
+
+after =  df["used_subreddits"][0]
+
+print("AFTER: ", after)
+print("SAME STRING: ", before==after)
+#%%
+
+
+
+#%%
+df.to_csv("../project/data/csv_files/data_all_simple_mains.csv", sep=";",index=False)
 
 
 # %%

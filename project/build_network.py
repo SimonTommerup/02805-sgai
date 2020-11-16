@@ -201,7 +201,7 @@ main_reddits = ['trump', 'biden']
 
 # Load data
 users, used_subreddits, from_subreddits = load_data("./data/csv_files/data_partitions_all.csv", main_reddits)
-from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
+# from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
 
 #for i in range(len(used_subreddits))
 
