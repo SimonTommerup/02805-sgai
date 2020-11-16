@@ -183,41 +183,30 @@ Filtrated, this gave us XX users for each candidate, which seem sufficient as
 We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
 
 # Scene 11
-Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
+Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its all time top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
 
-# Scene 12->13:
+# Scene 12->13 + 14? Asger hjælp
 The final network is an undirected network of users, extracted from the bipartite graph. Two users u1 and u2 are connected with weight equal to number of common links to subreddits v in V. I.e. users are only connected if they have commented on the same subreddit. 
 
 
+# Scene 15:
+The final network of users consists of: 
+
+- ZZ nodes of reddit users with two attributes each:
+    - from_subreddit (trump or biden)
+    - comment (posted on from_subreddit)
+
+- RR edges between users, each with two link attributes:
+    - common_subreddits (between the two linked users)
+    - weight (length of common_subreddits)
+
+- MM mb of comments in total. 
 
 
-#### (what is the idea?, 
-We will do this looking at social medias. Specifically: reddit. We want to look closer at each candidates' supporters, by 
-- investigating which forums (subreddits) their supporters are typically active on
-- investigate if anything characterizes their supports' language
-The idea is then to create a network where we link users which typically are activate (comments) on the same subreddits apart from trump and biden, and see if there is a tendency. E.g. that trump users typically active on a "election fraud" subreddit compared to biden users.
 
-#### why is it interesting? 
-Interesting in many ways: 
-- for candidates to understand their supports
-- for the world to understand why USA is polarized (if it is?) 
-- mere? usikker her :D
 
-#### which datasets did you need to explore the idea?, 
-More specifically on the data we are looking at:
-- we are looking at two "main" subreddits ("forums") which themes trump and biden respectively
-- We then extract the users with most popular comments on these subreddits. 
-- For each of these users, we furthermore look into 
-    - which other subreddits this user is typically active on
-    - how they express themselves on reddit (i.e. their comments!)
 
-#### how did you download them)
-We download these by looking at two "main" subreddits: trump_reddit, biden_reddit
-- for each of these main reddits, we look at the X most popular threads 
-- Then we look at Y users which has posted the most popular comments on each of these X threads 
-- This gives us approx. X*Y users for each main subreddit. For each of these we
-    - download their comment on the main subreddit
-    - download the name of up to 50 other reddits, which they have popular comments on
+
 
 #### A walk-through of your preliminary data-analysis, addressing (
 #### What is the total size of your data? (MB, number of rows, number of variables, etc), What is the network you will be analyzing? (number of nodes? number of links?, degree distributions, what are node attributes?, etc.), What is the text you will be analyzing?, How will you tie the two together?) 
