@@ -10,6 +10,23 @@ dfp4 = pd.read_csv("../project/data/csv_files/data_partition_4_SatNov14.csv", se
 dfp5 = pd.read_csv("../project/data/csv_files/data_partition_5_SatNov14.csv", sep=";")
 dfp6 = pd.read_csv("../project/data/csv_files/data_partition_6_SunNov15.csv", sep=";")
 
+
+def join_data_partitions(dataframes):
+    jdf = pd.concat(dataframes, axis=0, join="outer", ignore_index=False)
+    return jdf
+
+def remove_repeated_users(dataframe):
+    df = dataframe
+    seen_users = ["user"]
+    data = []
+    for idx, user in enumerate(df["user"]):
+        if user not in seen_users:
+            seen_users.append(user)
+            data_item = df.iloc[idx].values.flatten().tolist()
+            data.append(data_item)
+    cdf = pd.DataFrame(data=data, columns=df.columns)
+    return cdf 
+
 def simplify_from_reddit(dataframe):
     df = dataframe
     subredditnames = list(set(df["from_subreddit"]))
@@ -44,8 +61,8 @@ if __name__ == "__main__":
 
     dataframes = [dfp1, dfp2, dfp3, dfp4, dfp5, dfp6]
 
-    df = utils.join_data_partitions(dataframes)
-    df = utils.remove_repeated_users(df)
+    df = join_data_partitions(dataframes)
+    df = remove_repeated_users(df)
     df, from_reddits = simplify_from_reddit(df)
     df = simplify_from_reddit_in_used_subreddits(df, from_reddits)
 
