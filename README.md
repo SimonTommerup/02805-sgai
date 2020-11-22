@@ -66,7 +66,7 @@ Subsubsubheadlines: size ###
 
 #### References: 
 
-Everytime some equation or new tool is used, find somewhere it is referenced. 
+Everytime some equation or new tool is used, find the relevant source to reference. 
 
 i.e.  "the Louvain algorithm (Blondel 2008) is used"
 
