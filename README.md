@@ -17,14 +17,92 @@ We can then apply all tools learned in the course to this net.
 - If we seperate nodes on either property 1 or 2 above - does their seem to be a community structure? From plots or modularity score? This would mean that e.g. "trump_supporter"s are more likely to be active on another subreddit like "corona virus doesn't exist" or similar...
 
 
-### TODOs:
-- Change encoding of list to json format (by calling json.dump(list))
-- Make retrievel script robust to server errors etc. (know where to start script if it stops..)
-- Downlaod data!!!
+
+### Outline of "3. Tools, theory and analysis. Describe the process of theory to insight"
+
+- _____________________ Introduction to the analysis _____________________
+    - What will be analyzed and why?
+        - "We want to investigate whether the subreddit users can represent each candidate's supporters.. "
+    - Present the bipartite network (with plots?)
+        - "We build a bipartite network to initially extract a network of users... " TBD: Maybe also detect communities??
+    - Building a weighted network of users
+        - We extract a weighted network of users, as these are the ones we want to characterize. 
+        - Present basic NETWORK stats we got from Project A (#Edges, #nodes, avg/min/max degree)
+        - Plot the network with (possibly with current classification = from_subreddit)
 
 
-### Outline:
+- _____________________ Extracting networks of interest and classifying users _____________________
 
+    - Extracting the "backbone" of the user network
+        - Motive: "As we saw from introduction - weighted is very dense... Might be able to extract to more informative!" 
+        - Tools: "Works by applying disperse filters, defined by "...
+        - Results: "Resulting network is..." (#Edges, #nodes, avg/min/max degree) + PLOT
+        - Discussion: " Will be used as comparison to weighted, to see which one gives more information"
+
+    - Classifying users with community Detection and sentiment analysis
+        - Motive: "Classifying users by from_subreddit is not necessarily optimal.
+        - Tools: Three compared partitions: from_subreddit, Louvain and sentiment in comment. Modularity. Plots
+        - Results: Modularity=... Plots=... #Links_Across_partition=..., MORE to decide the better partition!!?
+        - Discussion: From X and Y we find __ as the best partitioning for representing each candidates' supporters
+     
+_____________________ Comparing candidate sub-networks (of best partitioning) _____________________
+
+    - Simple Network Statistics for candidate sub-networks
+        - Motive: "To compare the two networks in terms of simple statistics"
+        - Tools: #Nodes, #Edges, Degrees, densities, median, mode, 
+        - Results: "compute them..."
+        - Discussion: "This could mean that... "
+    
+    - Degree Distributions and the Network types
+        - Motive: "To understand the characteristics of our networks... Does our network follow power-law? Which could mean..."
+        - Tools: explain theory...
+        - Results
+        - Discussion
+
+    - Advanced statistics (maybe this should be 3 seperate bullets)
+        - Motive: "Which supporters are more diverse in interests? which are etc...
+        - Tools: Clustering, Shortest paths and centralities in sub-networks?
+        - Results
+        - Discussion
+
+    - Community detection wihin partitions
+        - Motive: "Investigate if any communities within Biden/trump lair"
+        - Tools: Louvain
+        - Results
+        - Dicussion
+
+
+_____________________ Detecting communities with the bipartite network? _____________________ (ONLY MAYBE THIS ONE!!)
+    - Detecting communities in the bipartite network
+        - Motive: "Bipartite networks might contain additional information, which is discarded in the projection
+        - Tools: "Explain how community detection works"...
+        - Results: "We saw a lot more!!" or "revealed nothing..."
+        - Discussion: "Probably because..."
+
+
+
+- _____________________ Comparing comments of candidates' supporters _____________________
+    - NLP
+        - Motive: Is one community more eloquent? Does either community have more catch-phrases? Typical words?
+        - Tools: Lexical diversity, collocations, TFTR + wordclouds
+        - Results
+        - Discussion
+
+    - Sentiment analysis
+        - Motive: Is one candidate´s supporters more positive than the other's?
+        - Tools: Sentiment analysis of comments
+        - Results
+        - Discussion
+
+
+
+
+
+
+
+
+
+### Outline
 Klassificering og community detection:
 Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
 tekstanalyse (sentiment analysis - til klassificering)
@@ -53,175 +131,31 @@ Sentiment analysis
 Hvilke brugere er typisk mest positive negative (eller hvilken side er mest positiv eller negativ stemt?)
 Er der tendenser inden for sub-communities?
 
+### Explainer Notebook style guide:
 
+#### Sectioning: 
 
-# Video script:
+Headlines: size #
+1.,2.,3.,4.,5. 
 
-### An explanation of the central idea behind your final project 
-We want to investigate the "typical" supporter of trump and biden respectively
-#### (what is the idea?, 
-We will do this looking at social medias. Specifically: reddit. We want to look closer at each candidates' supporters, by 
-- investigating which forums (subreddits) their supporters are typically active on
-- investigate if anything characterizes their supports' language
-The idea is then to create a network where we link users which typically are activate (comments) on the same subreddits apart from trump and biden, and see if there is a tendency. E.g. that trump users typically active on a "election fraud" subreddit compared to biden users.
+Subheadlines: size ##
+1.1, 2.1, 3.1
 
-#### why is it interesting? 
-Interesting in many ways: 
-- for candidates to understand their supports
-- for the world to understand why USA is polarized (if it is?) 
-- mere? usikker her :D
+Subsubheadlines: size ###
+1.1.1, 1.1.2 
 
-#### which datasets did you need to explore the idea?, 
-More specifically on the data we are looking at:
-- we are looking at two "main" subreddits ("forums") which themes trump and biden respectively
-- We then extract the users with most popular comments on these subreddits. 
-- For each of these users, we furthermore look into 
-    - which other subreddits this user is typically active on
-    - how they express themselves on reddit (i.e. their comments!)
+Subsubsubheadlines: size ###
+1.1.1.1, 1.1.1.2 
 
-#### how did you download them)
-We download these by looking at two "main" subreddits: trump_reddit, biden_reddit
-- for each of these main reddits, we look at the X most popular threads 
-- Then we look at Y users which has posted the most popular comments on each of these X threads 
-- This gives us approx. X*Y users for each main subreddit. For each of these we
-    - download their comment on the main subreddit
-    - download the name of up to 50 other reddits, which they have popular comments on
+#### References: 
 
-#### A walk-through of your preliminary data-analysis, addressing (
-#### What is the total size of your data? (MB, number of rows, number of variables, etc), What is the network you will be analyzing? (number of nodes? number of links?, degree distributions, what are node attributes?, etc.), What is the text you will be analyzing?, How will you tie the two together?) 
+Everytime some equation or new tool is used, find the relevant source to reference. 
 
-The final network we analyze is then of X nodes and Y links. 
-- Each node is a user,
-- where links are created if two users {CONDITION}
+i.e.  "the Louvain algorithm (Blondel 2008) is used"
 
-Each node will be assigned two attributes:
-- the main subreddit which the user was extracted from (trump or biden)
-- the sentiment score of their comment on the main subreddit
+Place link or book in References section:
 
-- Edges will be assigned the list which connects the two connected nodes/users
-
-The user comments resulted in Z MB of data. This will also be used to characterize the X supporters language.
-
-
-#### An outline on the elements you'll need to get to your goal & the implementation plan..
-(VÆLGE SÅ MANGE SÅ MULIGT AF.... )
-
-Klassificering og community detection:
-Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
-tekstanalyse (sentiment analysis - til klassificering)
-netværksanalyse (parent reddit)
-frekvens af top-comments på parent reddit 
-Community detection/score
-Modularity score for trump vs biden partition for each classification
-Brug TR term ratio to make word clouds!
-“sub-word-clouds” for the most frequent words for the entire network (word clouds for comments der indeholder “covid” fx) 
-Partition within each party (“sub-communities”)
-Word clouds for each of these using TF-IDF
-Network statistics to learn about them?
- 
-Simple network statistics and analysis:
-Network type - random, scale-free etc. (node distribution)
-edge properties for most connected nodes (where edge property between two nodes are their common other_subreddits)
-top commented subreddits (within each community / overall)
-average shortest path within communities (fortæller om diversiteten af vælgerne?)  
-average degree within communities (fortæller noget om hvor mange fælles interesser de har)
-Most central users with respect to degree centrality (disse users interesser dækker umiddelbart de mest typiske interesser for denne egenskab/subreddit - og dermed måske også trump/biden suportters?)
- 
-Natural language processing:
-Lexical diversity within communities (Er et community mere velformuleret end det andet? - kig eventuelt også på kompleksitet af ord, såsom ordlængde)
-Collocations (make america great again?)
-Sentiment analysis
-Hvilke brugere er typisk mest positive negative (eller hvilken side er mest positiv eller negativ stemt?)
-Er der tendenser inden for sub-communities?
-
-
-
-
-
-
-# FRAME TEXTS:
-# Scene 0.5 or 1:
-Who are the typical Trump and Biden supporters?
-
-# Scene 1, 1.5 or 2:
-Do the candidates' supporters have any characerizing interests?
-And do one express themselves differently?
-
-# Scene 3
-Election campaign material spread accross... ...platforms
-
-# Scene 4
-Focusing on reddit
-
-We use PRAW to extract information
-- a wrapper to the reddit API 
-
-# Scene 5
-Info on supporters are extracted from the candidates' main subreddit pages
-(Synes ikke deres egentlige navne er nødvendige. Disse skifter ofte)
-
-# Scene 7+8
-Looking at the top 36 threads for each candidate
-
-We extract the top 48 associated comments for each thread
-
-Resulting in 1728 examined users and comments for each candidates' subreddit page. 
-
-# Scene 8.5 (or 9?)
-TODO: Måske dette slide skal flyttes til sidst ala: "so why 2600 nodes?"
-Filtrated, this gave us ~1340 users for each candidate, which seem sufficient as
-1. Users represent only top comments and top threads on r/DonaldTrump and r/JoeBiden.
-
-2. Top comments are the most upvoted over all time.
-
-3. Top comments ensures quality of the nodes, which means
-    - The comments are not gibberish.
-    - We assume that authors with posts that are upvoted are sincere authors relative to their subreddit.
-    - We assume that this reasoning is amplified by only taking top threads.
-
-4. Since top threads and top comments are in a direct sense endorsed by the subreddit, it is assumed that their representativity of the users in a given subreddit is higher compared to comments with few or no upvotes. Therefore we assume that our sample sizes are large enough to represent users on either subreddit.
-
-# Scene 9/10? Asger hjælp
-We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
-
-# Scene 11
-Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its all time top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
-
-# Scene 12->13 + 14? Asger hjælp
-The final network is an undirected network of users, extracted from the bipartite graph. Two users u1 and u2 are connected with weight equal to number of common links to subreddits v in V. I.e. users are only connected if they have commented on the same subreddit. 
-
-
-# Scene 15:
-The final network of users consists of: 
-
-- 1728 nodes of reddit users with two attributes each:
-    - from_subreddit (trump or biden)
-    - comment (posted on from_subreddit)
-
-- 1,860,379 edges between users, each with two link attributes:
-    - common_subreddits (between the two linked users)
-    - weight (length of common_subreddits)
-
-# Scene 16 (lidt hurtigt klip): 
-The data consists of 4.0 MB in total. 
-( BILLEDE AF PANDAS DATAFRAME PRINT? T Har et!)
-
-# Scene 17 (lidt hurtigt klip):
-Degree stats:
-- Minimum: 1 
-- Maximum: 2462
-- Average: 1380
-
-(BILLEDE AF DEGREE DIST + WEIGHTED DEGREE DIST. T HAR DEM)
-
-# Scene text analysis:
-The comments will form the basis of:
-
-- Sentiment analysis: General statistics on the sentiments across segments of the network.
-- Sentiment analysis: Predict communities based on the comment sentiment relative to the subreddit to which it is posted. Are genuine Trump voters more positive on r/DonaldTrump and conversely for Biden voters on r/Biden?
-- Natural language processing: WordClouds on the subreddits based on term frequency-term ratio analysis to investigate the themes of each subreddit
-- Natural language processing: Investigate the lexical diversity in the communities: Are the Trump communities more eloquent than the Biden communities or vice versa?
-- Natural language processing: Investigate the possible collocations in the communities: Slogans, catch-phrases and so on.
+"Fast unfolding of communities in large networks", Blondel et al. (2008), https://arxiv.org/pdf/0803.0476.pdf
 
 
 
@@ -229,33 +163,3 @@ The comments will form the basis of:
 
 
 
-#### An outline on the elements you'll need to get to your goal & the implementation plan..
-(VÆLGE SÅ MANGE SÅ MULIGT AF.... )
-
-Klassificering og community detection:
-Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
-tekstanalyse (sentiment analysis - til klassificering)
-netværksanalyse (parent reddit)
-frekvens af top-comments på parent reddit 
-Community detection/score
-Modularity score for trump vs biden partition for each classification
-Brug TR term ratio to make word clouds!
-“sub-word-clouds” for the most frequent words for the entire network (word clouds for comments der indeholder “covid” fx) 
-Partition within each party (“sub-communities”)
-Word clouds for each of these using TF-IDF
-Network statistics to learn about them?
- 
-Simple network statistics and analysis:
-Network type - random, scale-free etc. (node distribution)
-edge properties for most connected nodes (where edge property between two nodes are their common other_subreddits)
-top commented subreddits (within each community / overall)
-average shortest path within communities (fortæller om diversiteten af vælgerne?)  
-average degree within communities (fortæller noget om hvor mange fælles interesser de har)
-Most central users with respect to degree centrality (disse users interesser dækker umiddelbart de mest typiske interesser for denne egenskab/subreddit - og dermed måske også trump/biden suportters?)
- 
-Natural language processing:
-Lexical diversity within communities (Er et community mere velformuleret end det andet? - kig eventuelt også på kompleksitet af ord, såsom ordlængde)
-Collocations (make america great again?)
-Sentiment analysis
-Hvilke brugere er typisk mest positive negative (eller hvilken side er mest positiv eller negativ stemt?)
-Er der tendenser inden for sub-communities?

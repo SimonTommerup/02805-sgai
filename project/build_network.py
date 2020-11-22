@@ -215,7 +215,7 @@ w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
 #G_w = add_weights_to_graph(G, w_dict)
 
 # Plot degree dist
-plot_degree_dist(G, bins=40, weighted=False)
+plot_degree_dist(G, bins=40, weighted=True)
 
 
 # Save graph

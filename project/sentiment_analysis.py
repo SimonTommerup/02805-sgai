@@ -92,7 +92,7 @@ if __name__ == "__main__":
     trump_tokens = dataframe_comments_to_tokens(trump_df)
     biden_tokens = dataframe_comments_to_tokens(biden_df)
 
-    trump_tftr, biden_tftr = get_TFTR(trump_tokens, biden_tokens, c=1)
+    trump_tftr, biden_tftr = get_TFTR(trump_tokens, biden_tokens, c=25)
     trump_tftr.sort(reverse=True, key=lambda t: t[1])
     biden_tftr.sort(reverse=True, key=lambda t: t[1])
 
