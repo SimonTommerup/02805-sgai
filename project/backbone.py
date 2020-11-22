@@ -2,7 +2,7 @@ import scipy
 import networkx as nx
 import numpy as np
 from scipy import integrate
-
+import build_network as bn
 
 def disparity_filter(G):
     """
@@ -66,9 +66,9 @@ if __name__ == "__main__":
 
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
     # once locally.
-    Gdf = disparity_filter(G)
-    nx.write_gpickle(Gdf, "data/networks/w_completeG_disparity_filtered.gpickle")
-    #Gdf = nx.read_gpickle("data/networks/w_completeG_disparity_filtered.gpickle")
+    #Gdf = disparity_filter(G)
+    #nx.write_gpickle(Gdf, "data/networks/w_completeG_disparity_filtered.gpickle")
+    Gdf = nx.read_gpickle("data/networks/w_completeG_disparity_filtered.gpickle")
     #print("Filtered: Number of nodes: ", len(Gdf.nodes))
     #print("Filtered: Number of edges: ", len(Gdf.edges))
 
@@ -92,3 +92,7 @@ if __name__ == "__main__":
     print("Percentage of edges preserved: ", len(D.edges)/len(G.edges)*100)
     print("Percentage of weight preserved: ", sum(dw) / sum(gw) * 100)
 
+#%%
+bn.plot_degree_dist(D, bins=40, weighted=True)
+
+# %%

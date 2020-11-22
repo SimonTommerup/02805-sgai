@@ -195,59 +195,59 @@ def add_weights_to_graph(G, w_dict):
     return G_w
 
 
+if __name__ == "__main__":
+    # %%
 
-# %%
+    main_reddits = ['trump', 'biden']
 
-main_reddits = ['trump', 'biden']
-
-# Load data
-users, used_subreddits, from_subreddits, comments = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
-# from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
-
-
-# Create graph
-G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
-#%%
-
-# Create alternative weighted graph
-w_dict, TFTR_raw = get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits)
-w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
-#G_w = add_weights_to_graph(G, w_dict)
-
-# Plot degree dist
-plot_degree_dist(G, bins=40, weighted=True)
+    # Load data
+    users, used_subreddits, from_subreddits, comments = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
+    # from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
 
 
-# Save graph
-nx.write_gpickle(G, "./data/networks/w_completeG_no_comments.gpickle")
+    # Create graph
+    G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
+    #%%
 
-# Load graph
-G = nx.read_gpickle("./data/networks/w_completeG_no_comments.gpickle")
+    # Create alternative weighted graph
+    w_dict, TFTR_raw = get_subreddits_common_for_both(from_subreddits, used_subreddits, main_reddits)
+    w_list = sorted(list(w_dict.items()), key=lambda x: x[1])
+    #G_w = add_weights_to_graph(G, w_dict)
+
+    # Plot degree dist
+    plot_degree_dist(G, bins=40, weighted=True)
 
 
+    # Save graph
+    nx.write_gpickle(G, "./data/networks/w_completeG_no_comments.gpickle")
+
+    # Load graph
+    G = nx.read_gpickle("./data/networks/w_completeG_no_comments.gpickle")
 
 
 
 
-###### CHECK DATA IN GRAPH #########
-lis = [n for n in G.nodes if G.nodes[n]['from_subreddit'] == main_reddits[1]]
 
 
-### Loop through weight of edges
-ws = []
-for u, v, w in G.edges.data(data="weight"):
-    ws.append(w)
-ws = sorted(ws)
+    ###### CHECK DATA IN GRAPH #########
+    lis = [n for n in G.nodes if G.nodes[n]['from_subreddit'] == main_reddits[1]]
 
 
-## Degrees
-degrees_w = [val for (node, val) in G.degree(weight='weight')]
-degrees = [val for (node, val) in G.degree()]
-degrees.sort()
-degrees_w.sort()
+    ### Loop through weight of edges
+    ws = []
+    for u, v, w in G.edges.data(data="weight"):
+        ws.append(w)
+    ws = sorted(ws)
 
 
-## Freq dists of reddits
-res = sorted(TFTR_raw, key=lambda x: x[1])
-freq_but_not_dif = [[r, f, w, c] for r, f, w, c in res if w > 0.75 and w < 1.25 and f > 30]
-# %%
+    ## Degrees
+    degrees_w = [val for (node, val) in G.degree(weight='weight')]
+    degrees = [val for (node, val) in G.degree()]
+    degrees.sort()
+    degrees_w.sort()
+
+
+    ## Freq dists of reddits
+    res = sorted(TFTR_raw, key=lambda x: x[1])
+    freq_but_not_dif = [[r, f, w, c] for r, f, w, c in res if w > 0.75 and w < 1.25 and f > 30]
+    # %%
