@@ -169,7 +169,7 @@ Resulting in 1728 examined users and comments for each candidates' subreddit pag
 
 # Scene 8.5 (or 9?)
 TODO: Måske dette slide skal flyttes til sidst ala: "so why 2600 nodes?"
-Filtrated, this gave us ~1340 users for each candidate, which seem sufficient as
+Cleaned, this gave us ~1340 users for each candidate, which seem sufficient as
 1. Users represent only top comments and top threads on r/DonaldTrump and r/JoeBiden.
 
 2. Top comments are the most upvoted over all time.
@@ -185,7 +185,7 @@ Filtrated, this gave us ~1340 users for each candidate, which seem sufficient as
 We want a network of users which are connected based on their activity on other subreddits, attempting to capture common interests
 
 # Scene 11
-Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its all time top 50 comments on s. (Forestiller mig man kunne lave en firkant eller pile fra U->users og S->electrical fraud, QAnon og Funny cats)
+Specifically, we create a bipartite network of two distjoint sets U and S of users and subreddits. A user u is linked to subreddit s, if u has one of its all time top 50 comments on s. 
 
 # Scene 12->13 + 14? Asger hjælp
 The final network is an undirected network of users, extracted from the bipartite graph. Two users u1 and u2 are connected with weight equal to number of common links to subreddits v in V. I.e. users are only connected if they have commented on the same subreddit. 
@@ -226,12 +226,44 @@ The comments will form the basis of:
 
 
 
+# Scene 21: Further network and data analysis
+
+For the network and within communities:
+- Most popular subreddits
+- Network type
+    - (compare to distributions)
+- Investigate typical users 
+    - (with degree centrality)
+    - (with betweenness centrality)
+- Examine diversity of interests
+    - (average shortest path)
+    - (average degree)
 
 
-#### An outline on the elements you'll need to get to your goal & the implementation plan..
-(VÆLGE SÅ MANGE SÅ MULIGT AF.... )
+# Scene 22: Natural language processing:
+Lexical diversity within communities (Er et community mere velformuleret end det andet? - kig eventuelt også på kompleksitet af ord, såsom ordlængde)
+Collocations (make america great again?)
+Sentiment analysis
+Hvilke brugere er typisk mest positive negative (eller hvilken side er mest positiv eller negativ stemt?)
+Er der tendenser inden for sub-communities?
 
-Klassificering og community detection:
+
+# Scene 23: Klassificering og community detection:
+Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
+tekstanalyse (sentiment analysis - til klassificering)
+netværksanalyse (parent reddit)
+frekvens af top-comments på parent reddit 
+Community detection/score
+Modularity score for trump vs biden partition for each classification
+Brug TR term ratio to make word clouds!
+“sub-word-clouds” for the most frequent words for the entire network (word clouds for comments der indeholder “covid” fx) 
+Partition within each party (“sub-communities”)
+Word clouds for each of these using TF-IDF
+Network statistics to learn about them?
+
+
+
+### Klassificering og community detection:
 Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
 tekstanalyse (sentiment analysis - til klassificering)
 netværksanalyse (parent reddit)
