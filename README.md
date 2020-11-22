@@ -48,6 +48,34 @@ Sentiment analysis
 Hvilke brugere er typisk mest positive negative (eller hvilken side er mest positiv eller negativ stemt?)
 Er der tendenser inden for sub-communities?
 
+### Explainer Notebook style guide:
+
+#### Sectioning: 
+
+Headlines: size #
+1.,2.,3.,4.,5. 
+
+Subheadlines: size ##
+1.1, 2.1, 3.1
+
+Subsubheadlines: size ###
+1.1.1, 1.1.2 
+
+Subsubsubheadlines: size ###
+1.1.1.1, 1.1.1.2 
+
+#### References: 
+
+Everytime some equation or new tool is used, find somewhere it is referenced. 
+
+i.e.  "the Louvain algorithm (Blondel 2008) is used"
+
+Place link or book in References section:
+
+References:
+"Fast unfolding of communities in large networks", Blondel et al. (2008), https://arxiv.org/pdf/0803.0476.pdf
+
+
 
 
 
