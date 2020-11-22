@@ -206,7 +206,7 @@ users, used_subreddits, from_subreddits, comments = load_data("./data/csv_files/
 
 
 # Create graph
-G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=4)
+G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
 #%%
 
 # Create alternative weighted graph
@@ -219,10 +219,10 @@ plot_degree_dist(G, bins=40, weighted=True)
 
 
 # Save graph
-nx.write_gpickle(G, "./data/networks/w_completeG4_no_comments.gpickle")
+nx.write_gpickle(G, "./data/networks/w_completeG_no_comments.gpickle")
 
 # Load graph
-G = nx.read_gpickle("./data/networks/w_completeG4_no_comments.gpickle")
+G = nx.read_gpickle("./data/networks/w_completeG_no_comments.gpickle")
 
 
 

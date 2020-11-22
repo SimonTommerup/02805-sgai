@@ -18,8 +18,91 @@ We can then apply all tools learned in the course to this net.
 
 
 
-### Outline:
+### Outline of "3. Tools, theory and analysis. Describe the process of theory to insight"
 
+- _____________________ Introduction to the analysis _____________________
+    - What will be analyzed and why?
+        - "We want to investigate whether the subreddit users can represent each candidate's supporters.. "
+    - Present the bipartite network (with plots?)
+        - "We build a bipartite network to initially extract a network of users... " TBD: Maybe also detect communities??
+    - Building a weighted network of users
+        - We extract a weighted network of users, as these are the ones we want to characterize. 
+        - Present basic NETWORK stats we got from Project A (#Edges, #nodes, avg/min/max degree)
+        - Plot the network with (possibly with current classification = from_subreddit)
+
+
+- _____________________ Extracting networks of interest and classifying users _____________________
+
+    - Extracting the "backbone" of the user network
+        - Motive: "As we saw from introduction - weighted is very dense... Might be able to extract to more informative!" 
+        - Tools: "Works by applying disperse filters, defined by "...
+        - Results: "Resulting network is..." (#Edges, #nodes, avg/min/max degree) + PLOT
+        - Discussion: " Will be used as comparison to weighted, to see which one gives more information"
+
+    - Classifying users with community Detection and sentiment analysis
+        - Motive: "Classifying users by from_subreddit is not necessarily optimal.
+        - Tools: Three compared partitions: from_subreddit, Louvain and sentiment in comment. Modularity. Plots
+        - Results: Modularity=... Plots=... #Links_Across_partition=..., MORE to decide the better partition!!?
+        - Discussion: From X and Y we find __ as the best partitioning for representing each candidates' supporters
+     
+_____________________ Comparing candidate sub-networks (of best partitioning) _____________________
+
+    - Simple Network Statistics for candidate sub-networks
+        - Motive: "To compare the two networks in terms of simple statistics"
+        - Tools: #Nodes, #Edges, Degrees, densities, median, mode, 
+        - Results: "compute them..."
+        - Discussion: "This could mean that... "
+    
+    - Degree Distributions and the Network types
+        - Motive: "To understand the characteristics of our networks... Does our network follow power-law? Which could mean..."
+        - Tools: explain theory...
+        - Results
+        - Discussion
+
+    - Advanced statistics (maybe this should be 3 seperate bullets)
+        - Motive: "Which supporters are more diverse in interests? which are etc...
+        - Tools: Clustering, Shortest paths and centralities in sub-networks?
+        - Results
+        - Discussion
+
+    - Community detection wihin partitions
+        - Motive: "Investigate if any communities within Biden/trump lair"
+        - Tools: Louvain
+        - Results
+        - Dicussion
+
+
+_____________________ Detecting communities with the bipartite network? _____________________ (ONLY MAYBE THIS ONE!!)
+    - Detecting communities in the bipartite network
+        - Motive: "Bipartite networks might contain additional information, which is discarded in the projection
+        - Tools: "Explain how community detection works"...
+        - Results: "We saw a lot more!!" or "revealed nothing..."
+        - Discussion: "Probably because..."
+
+
+
+- _____________________ Comparing comments of candidates' supporters _____________________
+    - NLP
+        - Motive: Is one community more eloquent? Does either community have more catch-phrases? Typical words?
+        - Tools: Lexical diversity, collocations, TFTR + wordclouds
+        - Results
+        - Discussion
+
+    - Sentiment analysis
+        - Motive: Is one candidate´s supporters more positive than the other's?
+        - Tools: Sentiment analysis of comments
+        - Results
+        - Discussion
+
+
+
+
+
+
+
+
+
+### Outline
 Klassificering og community detection:
 Node attributes (hvordan klassificere vi users - negative kommentare eller bare parent reddit) - et klassificerings problem
 tekstanalyse (sentiment analysis - til klassificering)
