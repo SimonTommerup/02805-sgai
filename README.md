@@ -216,9 +216,10 @@ Degree stats:
 
 # Scene text analysis:
 The comments will form the basis of:
-- WordClouds on the subreddits based on term frequency-term ratio analysis to investigate the themes of each subreddit
+
 - Sentiment analysis: General statistics on the sentiments across segments of the network.
 - Sentiment analysis: Predict communities based on the comment sentiment relative to the subreddit to which it is posted. Are genuine Trump voters more positive on r/DonaldTrump and conversely for Biden voters on r/Biden?
+- Natural language processing: WordClouds on the subreddits based on term frequency-term ratio analysis to investigate the themes of each subreddit
 - Natural language processing: Investigate the lexical diversity in the communities: Are the Trump communities more eloquent than the Biden communities or vice versa?
 - Natural language processing: Investigate the possible collocations in the communities: Slogans, catch-phrases and so on.
 
