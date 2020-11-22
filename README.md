@@ -72,7 +72,6 @@ i.e.  "the Louvain algorithm (Blondel 2008) is used"
 
 Place link or book in References section:
 
-References:
 "Fast unfolding of communities in large networks", Blondel et al. (2008), https://arxiv.org/pdf/0803.0476.pdf
 
 
