@@ -21,10 +21,10 @@ We can then apply all tools learned in the course to this net.
 ### Outline of "3. Tools, theory and analysis. Describe the process of theory to insight"
 
 - _____________________ Introduction to the analysis _____________________
-    - What will be analyzed and why?
-        - "We want to investigate whether the subreddit users can represent each candidate's supporters.. "
+    What will be analyzed and why?
+    "We want to investigate whether the subreddit users can represent each candidate's supporters.. "
     - Present the bipartite network (with plots?)
-        - "We build a bipartite network to initially extract a network of users... " TBD: Maybe also detect communities??
+        - "We build a bipartite network to initially extract a network of users... " 
     - Building a weighted network of users
         - We extract a weighted network of users, as these are the ones we want to characterize. 
         - Present basic NETWORK stats we got from Project A (#Edges, #nodes, avg/min/max degree)
@@ -44,6 +44,12 @@ We can then apply all tools learned in the course to this net.
         - Tools: Three compared partitions: from_subreddit, Louvain and sentiment in comment. Modularity. Plots
         - Results: Modularity=... Plots=... #Links_Across_partition=..., MORE to decide the better partition!!?
         - Discussion: From X and Y we find __ as the best partitioning for representing each candidates' supporters
+        
+    - Detecting communities with the bipartite network? ONLY MAYBE!!
+        - Motive: "Bipartite networks might contain additional information, which is discarded in the projection
+        - Tools: "Explain how community detection works"...
+        - Results: "We saw a lot more!!" or "revealed nothing..."
+        - Discussion: "Probably because..."
      
 _____________________ Comparing candidate sub-networks (of best partitioning) _____________________
 
@@ -72,16 +78,11 @@ _____________________ Comparing candidate sub-networks (of best partitioning) __
         - Dicussion
 
 
-_____________________ Detecting communities with the bipartite network? _____________________ (ONLY MAYBE THIS ONE!!)
-    - Detecting communities in the bipartite network
-        - Motive: "Bipartite networks might contain additional information, which is discarded in the projection
-        - Tools: "Explain how community detection works"...
-        - Results: "We saw a lot more!!" or "revealed nothing..."
-        - Discussion: "Probably because..."
 
 
 
-- _____________________ Comparing comments of candidates' supporters _____________________
+
+- _____________________ Comparing text/comments of candidates' supporters _____________________
     - NLP
         - Motive: Is one community more eloquent? Does either community have more catch-phrases? Typical words?
         - Tools: Lexical diversity, collocations, TFTR + wordclouds

@@ -60,16 +60,9 @@ def load_data(file, main_reddits):
     from_subreddit = np.array(df.from_subreddit)
     comments = np.array(df.comment)
 
-
-
     used_subreddits_list = []
     for i, l in enumerate(used_subreddits):
-        # l1 = re.findall(r"\'(.*?)\'[,\]]", l) # TODO: Decode using json instead!
         l1 = json.loads(l)
-        # if main_reddits[0] in l1:
-        #     l1.remove(main_reddits[0])
-        # if main_reddits[1] in l1:
-        #     l1.remove(main_reddits[1])
         used_subreddits_list.append(l1)
     
     return users, used_subreddits_list, from_subreddit, comments
@@ -201,9 +194,7 @@ def add_weights_to_graph(G, w_dict):
 main_reddits = ['trump', 'biden']
 
 # Load data
-users, used_subreddits, from_subreddits, comments = load_data("./data/csv_files/data_all_merged.csv", main_reddits)
-# from_subreddits = ["trump" if "trump" in s.lower() else "biden" for s in from_subreddits]
-
+users, used_subreddits, from_subreddits, comments = load_data("./project/data/csv_files/data_all_merged.csv", main_reddits)
 
 # Create graph
 G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
@@ -250,4 +241,34 @@ degrees_w.sort()
 ## Freq dists of reddits
 res = sorted(TFTR_raw, key=lambda x: x[1])
 freq_but_not_dif = [[r, f, w, c] for r, f, w, c in res if w > 0.75 and w < 1.25 and f > 30]
+# %%
+
+commons_2_ignore = ['trump', 'biden', ""]
+used_subreddits_2 = []
+for l1 in used_subreddits:
+    l2 = [s for s in l1 if s not in commons_2_ignore]
+    used_subreddits_2.append(l2)
+
+n_links = []
+for i in (range(len(users))):
+    links = get_ids_of_users_with_common_subreddits(i, users, used_subreddits_2)
+    n_links.append(len(links))
+
+# %%
+k_min = np.min(n_links)
+k_max = np.max(n_links)
+print(f"k_min: {min(n_links)}, k_max: {max(n_links)}")
+count, bins = np.histogram(n_links, bins=40)
+plt.subplots(figsize=(10,8))  
+
+# Hist plot
+#plt.hist(bins[:len(bins)-1], count, color="darksalmon")
+plt.hist(n_links, bins, color="darksalmon")
+
+plt.title("title")   
+plt.xlabel('Degree')
+plt.ylabel('number of users')
+plt.show()
+# %%
+n_links[0]
 # %%
