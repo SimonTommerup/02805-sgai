@@ -41,6 +41,12 @@ def disparity_filter(G):
     return Gdf
 
 def alpha_cut(G, alpha_level=0.05):
+    """
+    Implements the removal of edges in G that are not significant on alpha_level.
+    References: 
+    python-backbone-network, https://github.com/aekpalakorn/python-backbone-network
+    M. A. Serrano et al. (2009) Extracting the Multiscale backbone of complex weighted networks. PNAS, 106:16, pp. 6483-6488.
+    """
     D = nx.Graph()
     for u, v, attributes in G.edges.data(data=True):
         try:
