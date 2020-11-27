@@ -3,6 +3,7 @@ import networkx as nx
 import numpy as np
 from scipy import integrate
 import build_network as bn
+import matplotlib.pyplot as plt
 
 def disparity_filter(G):
     """
@@ -62,43 +63,115 @@ def alpha_cut(G, alpha_level=0.05):
 
 
 if __name__ == "__main__":
+
+#%%
     G = nx.read_gpickle("data/networks/w_completeG_no_comments.gpickle")
-    print("Initial: Number of nodes: ", len(G.nodes))
-    print("Initial: Number of edges: ", len(G.edges))
+    
+    Ntot = len(G.nodes)
+    Ltot = len(G.edges)
     
     gw = []
     for u,v, w in G.edges.data(data="weight"):
         gw.append(w)
 
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
-    # once locally.
-    #Gdf = disparity_filter(G)
-    #nx.write_gpickle(Gdf, "data/networks/w_completeG_disparity_filtered.gpickle")
+    # once locally by running: Gdf = disparity_filter(G)
+
     Gdf = nx.read_gpickle("data/networks/w_completeG_disparity_filtered.gpickle")
-    #print("Filtered: Number of nodes: ", len(Gdf.nodes))
-    #print("Filtered: Number of edges: ", len(Gdf.edges))
-
-    # Authors recommend alpha values in the range [0.01, 0.5] (p. 6485)
-    alpha_level=0.25
-    D = alpha_cut(Gdf, alpha_level=alpha_level)
-
-    path = "data/networks/w_completeD_alpha=" + f"{alpha_level}" + ".gpickle"
-    nx.write_gpickle(D, path)
-
-    D = nx.read_gpickle(path)
-    print("After alpha_cut(): Number of nodes: ", len(D.nodes))
-    print("After alpha_cut(): Number of edges: ", len(D.edges))
-
-    dw = []
-    for u,v, w in D.edges.data(data="weight"):
-        dw.append(w)
-
-    print(f"Significance level: {alpha_level}")
-    print("Percentage of nodes preserved: ", len(D.nodes)/len(G.nodes)*100)
-    print("Percentage of edges preserved: ", len(D.edges)/len(G.edges)*100)
-    print("Percentage of weight preserved: ", sum(dw) / sum(gw) * 100)
 
 #%%
-bn.plot_degree_dist(D, bins=40, weighted=True)
+    # Authors recommend alpha values in range [0.01, 0.5]
+    alpha_levels = np.arange(0.01, 0.51, 0.01)
+
+    xvals = []
+    yvals = []
+    for idx, alpha_level in enumerate(alpha_levels):
+        print(idx + 1)
+        D = alpha_cut(Gdf, alpha_level=alpha_level)
+
+        Np = len(D.nodes)
+        Lp = len(D.edges)
+
+        yvals.append(Np / Ntot)
+        xvals.append(Lp / Ltot)
 
 # %%
+
+plt.plot(xvals, yvals, 'bo')
+plt.title("Fraction of preserved nodes as function of fraction of preserved edges")
+plt.xlabel("Lp / Ltot")
+plt.ylabel("Np / Ntot")
+plt.show()
+# %%
+
+plt.plot(alpha_levels, yvals, 'o', color="darksalmon")
+plt.plot(alpha_levels, xvals, 'o', color="deepskyblue")
+plt.plot(np.arange(0.0, 0.5,0.01), np.arange(0.0, 0.5,0.01), 'o', color="darkslategray")
+plt.title("Fraction of preserved nodes and preserved edges as function of alpha")
+plt.xlabel("alpha")
+plt.ylabel("Np / Ntot")
+plt.show()
+
+
+# Local Heterogeneity of weights
+
+Gnodes = sorted(G.degree, key=lambda x: x[1], reverse=False)
+
+Gnodes[100]
+
+def local_heterogeneity(G):
+    nodes_by_ascending_degree = sorted(G.degree, key=lambda x: x[1], reverse=False)
+    upsilon = []
+    degrees = []
+    for tup in nodes_by_ascending_degree:
+        i = tup[0]
+        k = tup[1]
+
+        degrees.append(k)
+
+        # Calculate sum of weights of incident edges
+        s_i = sum(G[i][j]["weight"] for j in G[i])
+
+        # Calculate square on each normalized weight
+        pij_sq = [ (G[i][j]["weight"] / s_i)**2 for j in G[i]]
+
+        # Sum of the squares:
+        sum_pij_sq = sum(pij_sq)
+
+        # Upsilon(i, k)
+        upsilon.append( k * sum_pij_sq )
+    
+    return upsilon, degrees
+
+upsilon, degrees = local_heterogeneity(G)
+
+figure = plt.figure()
+ax = plt.scatter(degrees, upsilon, "bo")
+ax
+plt.loglog(degrees, upsilon, 'bo')
+plt.loglog(degrees, degrees, 'ro')
+plt.show()
+
+
+fig = plt.figure()
+ax = plt.gca()
+ax.plot(degrees, upsilon,'o', c='blue', alpha=0.05, markeredgecolor='none')
+ax.plot(degrees, degrees,'o', c="red" )
+ax.set_yscale('log')
+ax.set_xscale('log')
+
+
+print(max(degrees))
+
+
+acut = alpha_cut(Gdf, alpha_level=0.01)
+acutdeg = sorted(acut.degree, key=lambda x: x[1], reverse=False)
+print(max(acutdeg))
+print(min(acutdeg))
+gdeg = sorted(G.degree, key=lambda x: x[1], reverse=False)
+print(max(gdeg))
+print(min(gdeg))
+
+# %%
+
+
