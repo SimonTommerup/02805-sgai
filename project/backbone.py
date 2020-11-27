@@ -65,19 +65,18 @@ def alpha_cut(G, alpha_level=0.05):
 if __name__ == "__main__":
 
 #%%
-    G = nx.read_gpickle("data/networks/w_completeG_no_comments.gpickle")
+    G = nx.read_gpickle("data/networks/G_weighted_T_B_removed.gpickle")
     
     Ntot = len(G.nodes)
     Ltot = len(G.edges)
     
-    gw = []
-    for u,v, w in G.edges.data(data="weight"):
-        gw.append(w)
-
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
     # once locally by running: Gdf = disparity_filter(G)
+    #Gdf = disparity_filter(G)
+    #nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
 
-    Gdf = nx.read_gpickle("data/networks/w_completeG_disparity_filtered.gpickle")
+    Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
+
 
 #%%
     # Authors recommend alpha values in range [0.01, 0.5]

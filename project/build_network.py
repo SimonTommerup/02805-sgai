@@ -193,8 +193,8 @@ if __name__ == "__main__":
 
     main_reddits = ['trump', 'biden']
 
-# Load data
-users, used_subreddits, from_subreddits, comments = load_data("./project/data/csv_files/data_all_merged.csv", main_reddits)
+    # Load data
+    users, used_subreddits, from_subreddits, comments = load_data("./project/data/csv_files/data_all_merged.csv", main_reddits)
 
     # Create graph
     G = create_graph(users, used_subreddits, from_subreddits, n_required_subreddits=1)
@@ -238,37 +238,37 @@ users, used_subreddits, from_subreddits, comments = load_data("./project/data/cs
     degrees_w.sort()
 
 
-## Freq dists of reddits
-res = sorted(TFTR_raw, key=lambda x: x[1])
-freq_but_not_dif = [[r, f, w, c] for r, f, w, c in res if w > 0.75 and w < 1.25 and f > 30]
-# %%
+    ## Freq dists of reddits
+    res = sorted(TFTR_raw, key=lambda x: x[1])
+    freq_but_not_dif = [[r, f, w, c] for r, f, w, c in res if w > 0.75 and w < 1.25 and f > 30]
+    # %%
 
-commons_2_ignore = ['trump', 'biden', ""]
-used_subreddits_2 = []
-for l1 in used_subreddits:
-    l2 = [s for s in l1 if s not in commons_2_ignore]
-    used_subreddits_2.append(l2)
+    commons_2_ignore = ['trump', 'biden', ""]
+    used_subreddits_2 = []
+    for l1 in used_subreddits:
+        l2 = [s for s in l1 if s not in commons_2_ignore]
+        used_subreddits_2.append(l2)
 
-n_links = []
-for i in (range(len(users))):
-    links = get_ids_of_users_with_common_subreddits(i, users, used_subreddits_2)
-    n_links.append(len(links))
+    n_links = []
+    for i in (range(len(users))):
+        links = get_ids_of_users_with_common_subreddits(i, users, used_subreddits_2)
+        n_links.append(len(links))
 
-# %%
-k_min = np.min(n_links)
-k_max = np.max(n_links)
-print(f"k_min: {min(n_links)}, k_max: {max(n_links)}")
-count, bins = np.histogram(n_links, bins=40)
-plt.subplots(figsize=(10,8))  
+    # %%
+    k_min = np.min(n_links)
+    k_max = np.max(n_links)
+    print(f"k_min: {min(n_links)}, k_max: {max(n_links)}")
+    count, bins = np.histogram(n_links, bins=40)
+    plt.subplots(figsize=(10,8))  
 
-# Hist plot
-#plt.hist(bins[:len(bins)-1], count, color="darksalmon")
-plt.hist(n_links, bins, color="darksalmon")
+    # Hist plot
+    #plt.hist(bins[:len(bins)-1], count, color="darksalmon")
+    plt.hist(n_links, bins, color="darksalmon")
 
-plt.title("title")   
-plt.xlabel('Degree')
-plt.ylabel('number of users')
-plt.show()
-# %%
-n_links[0]
-# %%
+    plt.title("title")   
+    plt.xlabel('Degree')
+    plt.ylabel('number of users')
+    plt.show()
+    # %%
+    n_links[0]
+    # %%
