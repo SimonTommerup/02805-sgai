@@ -61,63 +61,6 @@ def alpha_cut(G, alpha_level=0.05):
             D.add_edge(u,v, common_subreddits=cs, weight=w)
     return D
 
-
-if __name__ == "__main__":
-
-#%%
-    G = nx.read_gpickle("data/networks/G_weighted_T_B_removed.gpickle")
-    
-    Ntot = len(G.nodes)
-    Ltot = len(G.edges)
-    
-    # The filtered network exceed github limit by 3 MB so will maybe have to be created
-    # once locally by running: Gdf = disparity_filter(G)
-    #Gdf = disparity_filter(G)
-    #nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
-
-    Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
-
-
-#%%
-    # Authors recommend alpha values in range [0.01, 0.5]
-    alpha_levels = np.arange(0.01, 0.51, 0.01)
-
-    xvals = []
-    yvals = []
-    for idx, alpha_level in enumerate(alpha_levels):
-        print(idx + 1)
-        D = alpha_cut(Gdf, alpha_level=alpha_level)
-
-        Np = len(D.nodes)
-        Lp = len(D.edges)
-
-        yvals.append(Np / Ntot)
-        xvals.append(Lp / Ltot)
-
-# %%
-
-plt.plot(xvals, yvals, 'bo')
-plt.title("Fraction of preserved nodes as function of fraction of preserved edges")
-plt.xlabel("Lp / Ltot")
-plt.ylabel("Np / Ntot")
-plt.show()
-# %%
-
-plt.plot(alpha_levels, yvals, 'o', color="darksalmon")
-plt.plot(alpha_levels, xvals, 'o', color="deepskyblue")
-plt.plot(np.arange(0.0, 0.5,0.01), np.arange(0.0, 0.5,0.01), 'o', color="darkslategray")
-plt.title("Fraction of preserved nodes and preserved edges as function of alpha")
-plt.xlabel("alpha")
-plt.ylabel("Np / Ntot")
-plt.show()
-
-
-# Local Heterogeneity of weights
-
-Gnodes = sorted(G.degree, key=lambda x: x[1], reverse=False)
-
-Gnodes[100]
-
 def local_heterogeneity(G):
     nodes_by_ascending_degree = sorted(G.degree, key=lambda x: x[1], reverse=False)
     upsilon = []
@@ -125,7 +68,6 @@ def local_heterogeneity(G):
     for tup in nodes_by_ascending_degree:
         i = tup[0]
         k = tup[1]
-
         degrees.append(k)
 
         # Calculate sum of weights of incident edges
@@ -142,35 +84,118 @@ def local_heterogeneity(G):
     
     return upsilon, degrees
 
-upsilon, degrees = local_heterogeneity(G)
+if __name__ == "__main__":
 
-figure = plt.figure()
-ax = plt.scatter(degrees, upsilon, "bo")
-ax
-plt.loglog(degrees, upsilon, 'bo')
-plt.loglog(degrees, degrees, 'ro')
-plt.show()
+#%%
+    G = nx.read_gpickle("data/networks/G_weighted_T_B_removed.gpickle")
+    gw = []
+    for u, v, weight in G.edges.data(data="weight"):
+        gw.append(weight)
 
+    gw2 = [val for (node, val) in G.degree(weight='weight')]
 
-fig = plt.figure()
-ax = plt.gca()
-ax.plot(degrees, upsilon,'o', c='blue', alpha=0.05, markeredgecolor='none')
-ax.plot(degrees, degrees,'o', c="red" )
-ax.set_yscale('log')
-ax.set_xscale('log')
+    plt.hist(gw2, bins=20)
+    plt.show()
 
 
-print(max(degrees))
+
+    Ntot = len(G.nodes)
+    Ltot = len(G.edges)
+    # The filtered network exceed github limit by 3 MB so will maybe have to be created
+    # once locally by running: Gdf = disparity_filter(G)
+    #Gdf = disparity_filter(G)
+    #nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
+
+    Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
 
 
-acut = alpha_cut(Gdf, alpha_level=0.01)
-acutdeg = sorted(acut.degree, key=lambda x: x[1], reverse=False)
-print(max(acutdeg))
-print(min(acutdeg))
-gdeg = sorted(G.degree, key=lambda x: x[1], reverse=False)
-print(max(gdeg))
-print(min(gdeg))
+#%%
+    # Authors recommend alpha values in range [0.01, 0.5]
+    alpha_levels = np.arange(0.01, 0.51, 0.01)
+
+    xvals = []
+    yvals = []
+    for idx, alpha_level in enumerate(alpha_levels):
+        print(idx+1)
+        D = alpha_cut(Gdf, alpha_level=alpha_level)
+
+        Np = len(D.nodes)
+        Lp = len(D.edges)
+
+        yvals.append(Np / Ntot)
+        xvals.append(Lp / Ltot)
+
+
+    # Authors recommend alpha values in range [0.01, 0.5]
+    alpha_levels = np.arange(0.01, 0.51, 0.01)
+    tw = []
+    for u, v, weight in G.edges.data(data="weight"):
+        tw.append(weight)
+
+    total_weight = sum(tw)
+
+    xvals = []
+    yvals = []
+    for idx, alpha_level in enumerate(alpha_levels):
+        print(idx+1)
+        D = alpha_cut(Gdf, alpha_level=alpha_level)
+
+        Np = len(D.nodes)
+        Lp = len(D.edges)
+
+        dw = []
+        for u, v, weight in D.edges.data(data="weight"):
+            dw.append(weight)
+
+        yvals.append(Np / Ntot)
+        xvals.append(sum(dw) / total_weight)
+
+
+
+    # %%
+
+    plt.plot(xvals, yvals, 'bo')
+    plt.plot(xvals[8], yvals[8], 'ro')
+    plt.title("Fraction of preserved nodes as function of fraction of preserved weight")
+    plt.xlabel("Lp / Ltot")
+    plt.ylabel("Np / Ntot")
+    plt.show()
+    # %%
+
+    plt.plot(alpha_levels, yvals, 'o', color="darksalmon")
+    plt.plot(alpha_levels, xvals, 'o', color="deepskyblue")
+    plt.plot(np.arange(0.0, 0.5,0.01), np.arange(0.0, 0.5,0.01), 'o', color="darkslategray")
+    plt.title("Fraction of preserved nodes and preserved edges as function of alpha")
+    plt.xlabel("alpha")
+    plt.ylabel("Np / Ntot")
+    plt.show()
+
+
+#%%
+
+    res = [x / y for x, y in zip(xvals, yvals)]
+    print(np.argmax(res))
+
+    print(res)
+
+# %%
+
+print(alpha_levels[8])
+
+print(xvals)
+# %%
+print(yvals)
+# %%
+
+lst=[]
+for x, y in zip(xvals, yvals):
+    lst.append(y/x)
+
+print(np.argmax(lst))
+
 
 # %%
 
 
+B = alpha_cut(Gdf, alpha_level=0.09)
+nx.write_gpickle(B, "data/networks/BackBone_alpha=0.09.gpickle")
