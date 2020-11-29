@@ -25,10 +25,15 @@ def disparity_filter(G):
 
         # Node degree
         k = len(G[i])
-        if k > 1: # (Serrano 2009, footnote, p. 6485)
 
+        # Save node
+        Gdf.add_node(i, from_subreddit=G.nodes[i]["from_subreddit"])
+
+        if k > 1: # (Serrano 2009, footnote, p. 6485)
+            
             # Node strength:
             s_i = sum( G[i][j]["weight"] for j in G[i])
+            
             for j in G[i]:
 
                 # Disparity Filtering
@@ -36,6 +41,8 @@ def disparity_filter(G):
                 p_ij = w_ij / s_i 
                 alpha_ij = 1 - (k-1) * scipy.integrate.quad(lambda x: (1-x)**(k-2), 0, p_ij)[0]
 
+                # Save neighbor node
+                Gdf.add_node(j, from_subreddit=G.nodes[j]["from_subreddit"])
                 # Saving edge with alpha-value
                 Gdf.add_edge(i, j, common_subreddits=G[i][j]["common_subreddits"], weight=w_ij, alpha=alpha_ij)
 
@@ -56,6 +63,8 @@ def alpha_cut(G, alpha_level=0.05):
             alpha = 1
         
         if alpha < alpha_level:
+            D.add_node(u, from_subreddit=G.nodes[u]["from_subreddit"])
+            D.add_node(v, from_subreddit=G.nodes[v]["from_subreddit"])
             cs = attributes["common_subreddits"]
             w = attributes["weight"]
             D.add_edge(u,v, common_subreddits=cs, weight=w)
@@ -88,114 +97,32 @@ if __name__ == "__main__":
 
 #%%
     G = nx.read_gpickle("data/networks/G_weighted_T_B_removed.gpickle")
-    gw = []
-    for u, v, weight in G.edges.data(data="weight"):
-        gw.append(weight)
-
-    gw2 = [val for (node, val) in G.degree(weight='weight')]
-
-    plt.hist(gw2, bins=20)
-    plt.show()
-
-
 
     Ntot = len(G.nodes)
     Ltot = len(G.edges)
+    print(Ntot)
+    print(Ltot)
+
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
     # once locally by running: Gdf = disparity_filter(G)
-    #Gdf = disparity_filter(G)
-    #nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
+    Gdf = disparity_filter(G)
+
+    N2tot = len(Gdf.nodes)
+    L2tot = len(Gdf.edges)
+    print(N2tot)
+    print(L2tot)
+
+
+
+    nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
 
     Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
 
 
-#%%
-    # Authors recommend alpha values in range [0.01, 0.5]
-    alpha_levels = np.arange(0.01, 0.51, 0.01)
+    B = alpha_cut(Gdf, alpha_level=0.09)
+    nx.write_gpickle(B, "data/networks/BackBone_alpha=0.09.gpickle")
 
-    xvals = []
-    yvals = []
-    for idx, alpha_level in enumerate(alpha_levels):
-        print(idx+1)
-        D = alpha_cut(Gdf, alpha_level=alpha_level)
-
-        Np = len(D.nodes)
-        Lp = len(D.edges)
-
-        yvals.append(Np / Ntot)
-        xvals.append(Lp / Ltot)
-
-
-    # Authors recommend alpha values in range [0.01, 0.5]
-    alpha_levels = np.arange(0.01, 0.51, 0.01)
-    tw = []
-    for u, v, weight in G.edges.data(data="weight"):
-        tw.append(weight)
-
-    total_weight = sum(tw)
-
-    xvals = []
-    yvals = []
-    for idx, alpha_level in enumerate(alpha_levels):
-        print(idx+1)
-        D = alpha_cut(Gdf, alpha_level=alpha_level)
-
-        Np = len(D.nodes)
-        Lp = len(D.edges)
-
-        dw = []
-        for u, v, weight in D.edges.data(data="weight"):
-            dw.append(weight)
-
-        yvals.append(Np / Ntot)
-        xvals.append(sum(dw) / total_weight)
-
-
-
-    # %%
-
-    plt.plot(xvals, yvals, 'bo')
-    plt.plot(xvals[8], yvals[8], 'ro')
-    plt.title("Fraction of preserved nodes as function of fraction of preserved weight")
-    plt.xlabel("Lp / Ltot")
-    plt.ylabel("Np / Ntot")
-    plt.show()
-    # %%
-
-    plt.plot(alpha_levels, yvals, 'o', color="darksalmon")
-    plt.plot(alpha_levels, xvals, 'o', color="deepskyblue")
-    plt.plot(np.arange(0.0, 0.5,0.01), np.arange(0.0, 0.5,0.01), 'o', color="darkslategray")
-    plt.title("Fraction of preserved nodes and preserved edges as function of alpha")
-    plt.xlabel("alpha")
-    plt.ylabel("Np / Ntot")
-    plt.show()
-
-
-#%%
-
-    res = [x / y for x, y in zip(xvals, yvals)]
-    print(np.argmax(res))
-
-    print(res)
-
-# %%
-
-print(alpha_levels[8])
-
-print(xvals)
-# %%
-print(yvals)
-# %%
-
-lst=[]
-for x, y in zip(xvals, yvals):
-    lst.append(y/x)
-
-print(np.argmax(lst))
-
-
-# %%
-
-
-B = alpha_cut(Gdf, alpha_level=0.09)
-nx.write_gpickle(B, "data/networks/BackBone_alpha=0.09.gpickle")
+    N3tot = len(B.nodes)
+    L3tot = len(B.edges)
+    print(N3tot)
+    print(L3tot)
