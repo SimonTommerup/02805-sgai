@@ -145,7 +145,7 @@ Subheadlines: size ##
 Subsubheadlines: size ###
 1.1.1, 1.1.2 
 
-Subsubsubheadlines: size ###
+Subsubsubheadlines: size ####
 1.1.1.1, 1.1.1.2 
 
 #### References: 
