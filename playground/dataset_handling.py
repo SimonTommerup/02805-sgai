@@ -232,8 +232,21 @@ df = pd.read_csv("../project/data/csv_files/data_all_merged.csv", sep=";")
 
 # %%
 
+print(df.iloc[0]["used_subreddits"])
+
 trump = df[df["from_subreddit"]=="trump"]
 biden = df[df["from_subreddit"]=="biden"]
+
+def coa(cand, dataframe):
+    c = 0
+    for us in dataframe["used_subreddits"]:
+        l = json.loads(us)
+        if cand in l:
+            c += 1
+    return c
+
+print(coa("biden", trump))
+print(coa("trump", biden))
 
 
 # %%

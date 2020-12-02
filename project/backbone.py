@@ -4,6 +4,7 @@ import numpy as np
 from scipy import integrate
 import build_network as bn
 import matplotlib.pyplot as plt
+import collections
 
 def disparity_filter(G):
     """
@@ -70,6 +71,26 @@ def alpha_cut(G, alpha_level=0.05):
             D.add_edge(u,v, common_subreddits=cs, weight=w)
     return D
 
+def about_alpha_cut(G, alpha_level=0.05):
+    cut_weight = []
+    cut_reddits = []
+    stay_weight = []
+    stay_reddits = []
+    for idx, (u, v, attributes) in enumerate(G.edges.data(data=True)):
+        try:
+            alpha = attributes["alpha"]
+        except KeyError:
+            alpha = 1
+        
+        if alpha < alpha_level:
+            stay_weight.append(attributes["weight"])
+            stay_reddits.append(attributes["common_subreddits"])
+        elif alpha >= alpha_level:
+            cut_weight.append(attributes["weight"])
+            cut_reddits.append(attributes["common_subreddits"])
+    
+    return cut_weight, cut_reddits, stay_weight, stay_reddits
+
 def local_heterogeneity(G):
     nodes_by_ascending_degree = sorted(G.degree, key=lambda x: x[1], reverse=False)
     upsilon = []
@@ -105,24 +126,107 @@ if __name__ == "__main__":
 
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
     # once locally by running: Gdf = disparity_filter(G)
-    Gdf = disparity_filter(G)
+    #Gdf = disparity_filter(G)
 
     N2tot = len(Gdf.nodes)
     L2tot = len(Gdf.edges)
     print(N2tot)
     print(L2tot)
 
-
-
-    nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
-
+    #nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
     Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
 
-
-    B = alpha_cut(Gdf, alpha_level=0.09)
-    nx.write_gpickle(B, "data/networks/BackBone_alpha=0.09.gpickle")
+    B = alpha_cut(Gdf, alpha_level=0.5)
+    #nx.write_gpickle(B, "data/networks/BackBone_alpha=0.17.gpickle")
 
     N3tot = len(B.nodes)
     L3tot = len(B.edges)
     print(N3tot)
     print(L3tot)
+
+    cw, cr, sw, sr = about_alpha_cut(Gdf, alpha_level=0.5)
+
+
+
+#%%
+    def graph_diversity(G):
+        reddits = {}
+        for u,v, attributes in G.edges.data(data=True):
+            for elem in attributes["common_subreddits"]:
+                try: 
+                    reddits[elem] = reddits[elem] + 1
+                except KeyError:
+                    reddits[elem] = 1
+        return reddits
+
+    def count_cuts(cutreddits):
+        reddits = {}
+        for lst in cutreddits:
+            for elem in lst:
+                try:
+                    reddits[elem] = reddits[elem] + 1
+                except KeyError:
+                    reddits[elem] = 1
+        return reddits
+
+    def count_weights(cutweights):
+        weights = {}
+        for elem in cutweights:
+                try:
+                    weights[elem] = weights[elem] + 1
+                except KeyError:
+                    weights[elem] = 1
+        return weights
+
+    creds = count_cuts(cr)
+    sreds = count_cuts(sr)
+
+    def highest_key(cnt):
+        maximum = 0
+        key = ""
+        for k, v in cnt.items():
+            if v > maximum:
+                maximum = v
+                key = k
+        return key, maximum
+
+
+    cweights = count_weights(cw)
+    sweights = count_weights(sw)
+
+    print(collections.Counter(sreds).most_common(25))
+    print(collections.Counter(sweights).most_common(25))
+
+    checktot = 0
+    for k, v in cweights.items():
+        checktot += v
+    print(Ltot-checktot)
+    print(L3tot)
+
+    def ask_reddit_with_weight(cutweights, cutreddits):
+        count = 0
+        for idx, w in enumerate(cutweights):
+            if w in [1,2,3]:
+                #print("here")
+                for elem in cutreddits[idx]:
+                    if "Ask Reddit" in elem:
+                        count += 1
+
+        return count
+    
+
+# %%
+    reddits_before = graph_diversity(G)
+    reddits_after = graph_diversity(B)
+
+    print(len(reddits_before))
+    print(len(reddits_after))
+
+    print("BEFORE : ", collections.Counter(reddits_before).most_common(100))
+    print("\n")
+    print("AFTER : " , collections.Counter(reddits_after).most_common(100))
+
+    print(0.09+3*(0.01))
+    alpha_levels = np.arange(0.01, 0.51, 0.01)
+
+    print(alpha_levels[16])
