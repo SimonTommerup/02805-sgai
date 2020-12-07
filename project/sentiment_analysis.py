@@ -28,8 +28,7 @@ def read_words_to_sentiment_values(labmt_dataframe):
 
 def comment_to_sentiment(comment, words_to_sentiment_values, lemmatizer):
     tokens = comment_to_tokens(comment)
-    lemmatized_tokens = lemmatize_tokens(tokens, lemmatizer)
-    sentiment = tokens_to_sentiment(lemmatized_tokens, words_to_sentiment_values)
+    sentiment = tokens_to_sentiment(tokens, words_to_sentiment_values)
     return sentiment
 
 def comment_to_tokens(comment):
@@ -132,11 +131,12 @@ if __name__ == "__main__":
 
 
     #print(sum(sentiments)/len(sentiments))
+
     dfcop["comment_sentiment"] = sentiments
     print(dfcop.head(1))
+
     columns=["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
     dfcop.to_csv("data/csv_files/data_all_merged_with_sentiment.csv",sep=";",columns=columns,index=False)
-
 """
     df_nona = df.copy()
 
