@@ -1,4 +1,3 @@
-#%%
 import pandas as pd
 import re
 import os
@@ -6,12 +5,15 @@ import nltk
 import wordcloud
 import matplotlib.pyplot as plt
 
+from nltk.stem import WordNetLemmatizer
+nltk.download("wordnet")
+
 def read_dataset(file_name):
     path = os.path.join("./..",file_name)
     return pd.read_csv(path, sep=";")
 
 def labmt():
-    return pd.read_csv("./../labmt-sentiment-data.txt",sep="\t")
+    return pd.read_csv("data/labmt-sentiment-data.txt",sep="\t")
 
 def read_words_to_sentiment_values(labmt_dataframe):
     df = labmt_dataframe
@@ -24,10 +26,23 @@ def read_words_to_sentiment_values(labmt_dataframe):
 
     return words_to_sentiment_values
 
+def comment_to_sentiment(comment, words_to_sentiment_values, lemmatizer):
+    tokens = comment_to_tokens(comment)
+    lemmatized_tokens = lemmatize_tokens(tokens, lemmatizer)
+    sentiment = tokens_to_sentiment(lemmatized_tokens, words_to_sentiment_values)
+    return sentiment
+
 def comment_to_tokens(comment):
     tokens = re.findall(r"\w+(?:[-']*\w*)*", comment)
     tokens = [w.lower() for w in tokens]
     return tokens
+
+def lemmatize_tokens(tokens, lemmatizer):
+    lemmatized_tokens = []
+    for token in tokens:
+        lemmatized_token = lemmatizer.lemmatize(token)
+        lemmatized_tokens.append(lemmatized_token)
+    return lemmatized_tokens
 
 def tokens_to_sentiment(tokens, words_to_sentiment_values,mean=True):
     w_to_sv = words_to_sentiment_values
@@ -85,36 +100,48 @@ def dataframe_comments_to_tokens(dataframe):
 
 if __name__ == "__main__":
     df = pd.read_csv("data/csv_files/data_all_merged.csv", sep=";")
+    df_with_sentiment = df.copy()
 
-    trump_df = df[df["from_subreddit"]=="trump"]
-    biden_df = df[df["from_subreddit"]=="biden"]
+    # equip data set with happiness scores
+    users = [u for u in df["user"]]
+    comments = [c for c in df["comment"]]
+    sentiments = []
 
-    trump_tokens = dataframe_comments_to_tokens(trump_df)
-    biden_tokens = dataframe_comments_to_tokens(biden_df)
+    # load labMT data
+    labMT = labmt()
 
-    trump_tftr, biden_tftr = get_TFTR(trump_tokens, biden_tokens, c=25)
-    trump_tftr.sort(reverse=True, key=lambda t: t[1])
-    biden_tftr.sort(reverse=True, key=lambda t: t[1])
+    # init map from words to sentiment values
+    words_to_sentiment_values = read_words_to_sentiment_values(labMT)
 
-    trump_freqstring = get_freq_string(trump_tftr)
-    biden_freqstring = get_freq_string(biden_tftr)
+    # init lemmatizer object
+    lemmatizer = WordNetLemmatizer()
 
-    trumpcloud = wordcloud.WordCloud(background_color="white", collocations=False, colormap="ocean")
-    bidencloud = wordcloud.WordCloud(background_color="white", collocations=False, colormap="ocean")
+    for comment in comments:
+        sentiment = comment_to_sentiment(comment, words_to_sentiment_values, lemmatizer)
+        sentiments.append(sentiment)
 
-    trumpcloud = trumpcloud.generate(trump_freqstring)
-    bidencloud = bidencloud.generate(biden_freqstring)
-    plt.subplots(figsize=(10,8))
-    plt.title("TrumpCloud")
-    plt.imshow(trumpcloud)
-    plt.axis("off")
-    plt.show()
-    plt.subplots(figsize=(10,8))
-    plt.title("BidenCloud")
-    plt.imshow(bidencloud)
-    plt.axis("off")
-    plt.show()
+    columns=["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
+    df_with_sentiment["comment_sentiment"] = sentiments
+    df_with_sentiment.to_csv("data/csv_files/data_all_merged_with_sentiment.csv", sep=";",columns=columns,index=False)
+
+
+
+
+
+
 #%%
 
+import json
+dftest = pd.read_csv("data/csv_files/data_all_merged_with_sentiment.csv", sep=";")
+
+us = dftest["used_subreddits"][0]
+
+print(type(us))
+
+us_json = json.loads(us)
+
+print(type(us_json))
+
+print(us_json[0])
 
 # %%
