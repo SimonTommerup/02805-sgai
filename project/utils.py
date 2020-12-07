@@ -110,7 +110,7 @@ if __name__ == "__main__":
     
     # Settings
     subreddit_titles = ["DonaldTrump", "JoeBiden"]
-    num_threads=48
+    num_threads=36
     num_comments_per_thread=48
     num_splits = 6 # 6 threads per subreddit per ids partition
 

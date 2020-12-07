@@ -127,6 +127,7 @@ if __name__ == "__main__":
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
     # once locally by running: Gdf = disparity_filter(G)
     #Gdf = disparity_filter(G)
+    Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
 
     N2tot = len(Gdf.nodes)
     L2tot = len(Gdf.edges)
@@ -134,9 +135,9 @@ if __name__ == "__main__":
     print(L2tot)
 
     #nx.write_gpickle(Gdf, "data/networks/G_disparity_filtered.gpickle")
-    Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
+    
 
-    B = alpha_cut(Gdf, alpha_level=0.5)
+    B = alpha_cut(Gdf, alpha_level=0.17)
     #nx.write_gpickle(B, "data/networks/BackBone_alpha=0.17.gpickle")
 
     N3tot = len(B.nodes)
@@ -144,7 +145,7 @@ if __name__ == "__main__":
     print(N3tot)
     print(L3tot)
 
-    cw, cr, sw, sr = about_alpha_cut(Gdf, alpha_level=0.5)
+    cw, cr, sw, sr = about_alpha_cut(Gdf, alpha_level=0.17)
 
 
 
@@ -222,11 +223,11 @@ if __name__ == "__main__":
     print(len(reddits_before))
     print(len(reddits_after))
 
-    print("BEFORE : ", collections.Counter(reddits_before).most_common(100))
-    print("\n")
-    print("AFTER : " , collections.Counter(reddits_after).most_common(100))
 
-    print(0.09+3*(0.01))
+    import numpy as np
     alpha_levels = np.arange(0.01, 0.51, 0.01)
 
     print(alpha_levels[16])
+
+#%%
+for req in
