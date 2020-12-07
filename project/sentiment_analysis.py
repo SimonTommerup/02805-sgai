@@ -6,7 +6,7 @@ import wordcloud
 import matplotlib.pyplot as plt
 
 from nltk.stem import WordNetLemmatizer
-nltk.download("wordnet")
+#nltk.download("wordnet")
 
 def read_dataset(file_name):
     path = os.path.join("./..",file_name)
@@ -38,30 +38,49 @@ def comment_to_tokens(comment):
     return tokens
 
 def lemmatize_tokens(tokens, lemmatizer):
+    # a lemmatizer is a WordNetLemmatizer object
+    # i.e. lemmatizer = WordNetLemmatizer()
     lemmatized_tokens = []
     for token in tokens:
         lemmatized_token = lemmatizer.lemmatize(token)
         lemmatized_tokens.append(lemmatized_token)
     return lemmatized_tokens
 
-def tokens_to_sentiment(tokens, words_to_sentiment_values,mean=True):
+def tokens_to_sentiment(tokens, words_to_sentiment_values):
     w_to_sv = words_to_sentiment_values
     fdist = nltk.FreqDist(tokens)
-    sentiment=[]
+    sentiment = 0
+    n_avg = 0
     for word, frequency in fdist.items():
         if word in w_to_sv.keys():
-            sentiment_score = w_to_sv[word] * frequency
-            sentiment.append(sentiment_score)
+            sentiment += w_to_sv[word] * frequency
+            n_avg += 1*frequency
 
-    if len(sentiment) == 0:
+    if sentiment == 0:
         return None
 
-    if not mean:
-        sentiment = sum(sentiment)
     else:
-        sentiment = sum(sentiment) / len(sentiment)
+        sentiment = sentiment / n_avg
 
     return sentiment
+
+def tokens_to_sentiment_alt(tokens, words_to_sentiment_values,mean=True):
+    w_to_sv = words_to_sentiment_values
+    sentiment_of_text = 0
+    n_avg = 0
+    # Create the frequency distribution and loop through it
+    fdist = nltk.FreqDist(tokens)
+    for w, f in fdist.items():
+        # Check if the token is a part of the LabMT list
+        if w in w_to_sv.keys():
+            # Compute the weighted sentiment of this token (according to how many times the word occurs)
+            sentiment_of_text += words_to_sentiment_values[w]*f
+            # Only compute the average with respect to the words which are in the LabMT list
+            n_avg+=1*f
+
+    # return error (-1) if none of the words in 'tokens' exist in the LabMT list
+    return sentiment_of_text/n_avg if n_avg>0 else -1
+
 
 def get_TFTR(trump_tokens, biden_tokens, c):
     t_tf = nltk.FreqDist(trump_tokens)
@@ -99,49 +118,37 @@ def dataframe_comments_to_tokens(dataframe):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("data/csv_files/data_all_merged.csv", sep=";")
-    df_with_sentiment = df.copy()
-
-    # equip data set with happiness scores
-    users = [u for u in df["user"]]
+    df = pd.read_csv("data/csv_files/data_all_merged_with_sentiment.csv", sep=";")
+    dfcop = df.copy()
+    print(dfcop.head(1))
+    w2sv = read_words_to_sentiment_values(labmt())
+    lem = WordNetLemmatizer()
     comments = [c for c in df["comment"]]
+
     sentiments = []
-
-    # load labMT data
-    labMT = labmt()
-
-    # init map from words to sentiment values
-    words_to_sentiment_values = read_words_to_sentiment_values(labMT)
-
-    # init lemmatizer object
-    lemmatizer = WordNetLemmatizer()
-
     for comment in comments:
-        sentiment = comment_to_sentiment(comment, words_to_sentiment_values, lemmatizer)
+        sentiment = comment_to_sentiment(comment, w2sv, lem)
         sentiments.append(sentiment)
 
+
+    #print(sum(sentiments)/len(sentiments))
+    dfcop["comment_sentiment"] = sentiments
+    print(dfcop.head(1))
     columns=["user","from_subreddit","comment","used_subreddits" ,"comment_sentiment"]
-    df_with_sentiment["comment_sentiment"] = sentiments
-    df_with_sentiment.to_csv("data/csv_files/data_all_merged_with_sentiment.csv", sep=";",columns=columns,index=False)
+    dfcop.to_csv("data/csv_files/data_all_merged_with_sentiment.csv",sep=";",columns=columns,index=False)
+
+"""
+    df_nona = df.copy()
 
 
+    df_nona = df_nona[df_nona["comment_sentiment"].isna()==False]
 
+    print("avg: ", sum(df_nona["comment_sentiment"])/len(df_nona))
 
+    lem = WordNetLemmatizer()
+    w2sv = read_words_to_sentiment_values(labmt())
 
-
-#%%
-
-import json
-dftest = pd.read_csv("data/csv_files/data_all_merged_with_sentiment.csv", sep=";")
-
-us = dftest["used_subreddits"][0]
-
-print(type(us))
-
-us_json = json.loads(us)
-
-print(type(us_json))
-
-print(us_json[0])
-
-# %%
+    print((sum(df_nona["comment_sentiment"])-43) / (len(df_nona)+43))
+    #s = comment_to_sentiment(com, w2sv, lem)
+    #print(s)
+"""
