@@ -127,6 +127,7 @@ if __name__ == "__main__":
     # The filtered network exceed github limit by 3 MB so will maybe have to be created
     # once locally by running: Gdf = disparity_filter(G)
     #Gdf = disparity_filter(G)
+
     Gdf = nx.read_gpickle("data/networks/G_disparity_filtered.gpickle")
 
     N2tot = len(Gdf.nodes)
@@ -148,86 +149,3 @@ if __name__ == "__main__":
     cw, cr, sw, sr = about_alpha_cut(Gdf, alpha_level=0.17)
 
 
-
-#%%
-    def graph_diversity(G):
-        reddits = {}
-        for u,v, attributes in G.edges.data(data=True):
-            for elem in attributes["common_subreddits"]:
-                try: 
-                    reddits[elem] = reddits[elem] + 1
-                except KeyError:
-                    reddits[elem] = 1
-        return reddits
-
-    def count_cuts(cutreddits):
-        reddits = {}
-        for lst in cutreddits:
-            for elem in lst:
-                try:
-                    reddits[elem] = reddits[elem] + 1
-                except KeyError:
-                    reddits[elem] = 1
-        return reddits
-
-    def count_weights(cutweights):
-        weights = {}
-        for elem in cutweights:
-                try:
-                    weights[elem] = weights[elem] + 1
-                except KeyError:
-                    weights[elem] = 1
-        return weights
-
-    creds = count_cuts(cr)
-    sreds = count_cuts(sr)
-
-    def highest_key(cnt):
-        maximum = 0
-        key = ""
-        for k, v in cnt.items():
-            if v > maximum:
-                maximum = v
-                key = k
-        return key, maximum
-
-
-    cweights = count_weights(cw)
-    sweights = count_weights(sw)
-
-    print(collections.Counter(sreds).most_common(25))
-    print(collections.Counter(sweights).most_common(25))
-
-    checktot = 0
-    for k, v in cweights.items():
-        checktot += v
-    print(Ltot-checktot)
-    print(L3tot)
-
-    def ask_reddit_with_weight(cutweights, cutreddits):
-        count = 0
-        for idx, w in enumerate(cutweights):
-            if w in [1,2,3]:
-                #print("here")
-                for elem in cutreddits[idx]:
-                    if "Ask Reddit" in elem:
-                        count += 1
-
-        return count
-    
-
-# %%
-    reddits_before = graph_diversity(G)
-    reddits_after = graph_diversity(B)
-
-    print(len(reddits_before))
-    print(len(reddits_after))
-
-
-    import numpy as np
-    alpha_levels = np.arange(0.01, 0.51, 0.01)
-
-    print(alpha_levels[16])
-
-#%%
-for req in
