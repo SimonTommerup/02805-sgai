@@ -1,7 +1,7 @@
 # Motivation for project
 
 
-Our motivation for doing this project is to explore two groups of internet users from a network science perspective and bring together a set of tools and techniques we have acquired from the course (02805) Social Graphs and Interactions in a useful way led by our curiosity that will provide real insights. 
+Our motivation for doing this project is to explore two groups of internet users from a network science perspective and bring together a set of tools and techniques we have acquired from the course (02805) Social Graphs and Interactions at the Technical University of Denmarnk (DTU) in a useful way led by our curiosity that will provide real insights. 
 
 Most information in modern days is exchanged on the internet. Political opinions and sentiments are shared at the speed of fiber cables on large internet fora. 
 
