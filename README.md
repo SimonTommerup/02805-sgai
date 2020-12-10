@@ -7,7 +7,7 @@ Most information in modern days is exchanged on the internet. Political opinions
 
 reddit is one of the largest internet fora with over 430 million monthly users from all over the world.  Around 50 million Americans and about a fourth of the Americans in the age between 25 and 29 uses reddit (https://www.oberlo.com/blog/reddit-statistics). 
 
-This means reddit gives a unique insight to information into what is being discussed in America.
+This means reddit gives a unique insight into what is being discussed in America.
 
 reddit is arranged into so-called subreddits where people discuss various subjects. Two of these subreddits are known as r/DonaldTrump and r/JoeBiden and is about the 2020 Presidential Candidates Donald Trump and Joe Biden and has many thousands of users each. 
 
