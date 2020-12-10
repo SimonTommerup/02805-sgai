@@ -18,3 +18,8 @@ We want to explore the similarities and differences in the interests of the user
 Data scraping files can be found in the *project* folder. `data_generator.py` does the actual scraping - and in part `utils.py` where the function `get_data_ids` was built to collect the thread and comment ids. These scripts also utilises the ``reddit.py`` for login credentials and ``merge_data.py`` to unite the different chunks of scraped data. 
 
 
+# Want to know more?
+All content from the project can be found here:
+https://asgerfg.wixsite.com/a-polarized-america
+
+
